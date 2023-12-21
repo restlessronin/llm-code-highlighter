@@ -13,7 +13,8 @@
                 "esbenp.prettier-vscode",
                 "GitHub.copilot",
                 "GitHub.copilot-chat",
-                "eamodio.gitlens"
+                "eamodio.gitlens",
+                "redhat.vscode-yaml"
             ]
         }
     },
