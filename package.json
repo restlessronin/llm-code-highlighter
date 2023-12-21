@@ -1,23 +1,35 @@
 {
-    "name": "code-context",
-    "version": "0.0.1",
-    "description": "Extract code context from a repo to send to a coding LLM",
-    "main": "dist/index.js",
-    "scripts": {
-        "test": "jest",
-        "build": "tsc",
-        "start": "node dist/index.js"
-    },
-    "keywords": [],
-    "author": "restlessronin",
-    "license": "Apache-2.0",
-    "devDependencies": {
-        "@types/jest": "^26.0.24",
-        "jest": "^26.6.3",
-        "ts-jest": "^26.5.6",
-        "typescript": "^4.9.5"
-    },
-    "dependencies": {
-        "web-tree-sitter": "^0.20.8"
-    }
+  "name": "code-context",
+  "version": "0.0.1",
+  "description": "Extract code context from a repo to send to a coding LLM",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "restlessronin",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.10.5",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.6",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "graphology": "^0.25.4",
+    "graphology-metrics": "^2.2.0",
+    "linguist-languages": "^7.27.0",
+    "lodash": "^4.17.21",
+    "path": "^0.12.7",
+    "web-tree-sitter": "^0.20.8"
+  }
 }

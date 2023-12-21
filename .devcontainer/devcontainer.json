@@ -1,22 +1,22 @@
 {
-    "name": "code-context",
-    "dockerFile": "Dockerfile",
-    "forwardPorts": [3000],
-    "customizations": {
-        "vscode": {
-            "settings": {
-                "terminal.integrated.shell.linux": "/bin/bash"
-            },
-            "extensions": [
-                "dbaeumer.vscode-eslint",
-                "ms-vscode.vscode-typescript-tslint-plugin",
-                "esbenp.prettier-vscode",
-                "GitHub.copilot",
-                "GitHub.copilot-chat",
-                "eamodio.gitlens",
-                "redhat.vscode-yaml"
-            ]
-        }
-    },
-    "remoteUser": "node"
+  "name": "code-context",
+  "dockerFile": "Dockerfile",
+  "forwardPorts": [3000],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.vscode-typescript-tslint-plugin",
+        "esbenp.prettier-vscode",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "eamodio.gitlens",
+        "redhat.vscode-yaml"
+      ]
+    }
+  },
+  "remoteUser": "node"
 }
