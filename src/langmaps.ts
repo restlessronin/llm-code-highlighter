@@ -47,5 +47,5 @@ export function getQueryFileName(lang: string) {
 
 export function getWasmPath(lang: string) {
   if (!(lang in _lang2QueryFileName)) return;
-  return `../assets/wasms/${_lang2QueryFileName[lang as Language]}.wasm`;
+  return `tree-sitter-${_lang2QueryFileName[lang as Language]}.wasm`;
 }

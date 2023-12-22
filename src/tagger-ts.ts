@@ -56,7 +56,9 @@ export class Tagger {
     const queryScm = fs.readFileSync(scmFname, 'utf8');
     const moduleName = langmaps.getWasmPath(lang);
     if (!moduleName) return;
-    const languageWasm = await Parser.Language.load(moduleName);
+    const wasmPath = path.join(__dirname, '../assets/wasms', moduleName);
+    if (!fs.existsSync(wasmPath)) return;
+    const languageWasm = await Parser.Language.load(wasmPath);
     if (!languageWasm) return;
     const parser = new Parser();
     parser.setLanguage(languageWasm);
