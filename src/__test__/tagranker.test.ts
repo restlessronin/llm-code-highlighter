@@ -7,7 +7,7 @@ describe('TagRanker', () => {
   let absPaths: string[];
 
   beforeEach(async () => {
-    workspacePath = path.resolve(__dirname, 'testWorkspace'); // Create a subdirectory named 'testWorkspace'
+    workspacePath = path.resolve(__dirname, '../_testworkspace_'); // Create a subdirectory named 'testWorkspace'
     absPaths = [
       path.resolve(workspacePath, 'test_file_with_identifiers.py'),
       path.resolve(workspacePath, 'test_file_import.py'),
