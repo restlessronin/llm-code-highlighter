@@ -25,6 +25,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
+    "glob": "^10.3.10",
     "graphology": "^0.25.4",
     "graphology-metrics": "^2.2.0",
     "linguist-languages": "^7.27.0",
