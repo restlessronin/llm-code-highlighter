@@ -8,7 +8,7 @@ describe('Tagger', () => {
   describe('read for JavaScript file contents', () => {
     it('should return an empty array when there are no captures', async () => {
       const tagger = await Tagger.createFromCode('test.js', 'test.js', 'JavaScript', 'let x = 1;')!;
-      const result = await tagger?.read();
+      const result = tagger?.read();
       expect(result).toEqual([]);
     });
 
