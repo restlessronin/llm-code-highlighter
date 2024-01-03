@@ -1,10 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as langmaps from './langmaps';
-
-import Parser from 'web-tree-sitter';
-
-const parserInitPromise = Parser.init();
+import { AST } from './ast-ts';
 
 function _getKind(tag: string) {
   if (tag.startsWith('name.definition.')) {
@@ -32,62 +29,38 @@ export type Tag = {
 };
 
 export class Tagger {
-  readonly absPath: string;
-  readonly relPath: string;
-  readonly parser: Parser;
-  readonly language: any;
+  readonly ast: AST;
   readonly queryScm: string;
-  readonly code: string;
-
-  static async create(absPath: string, relPath: string) {
-    const lang = langmaps.getLinguistLanguage(absPath);
-    if (!lang) return;
-    return Tagger.createLang(absPath, relPath, lang);
-  }
-
-  static async createLang(absPath: string, relPath: string, lang: string) {
-    const code = fs.readFileSync(absPath, 'utf8');
-    if (!code) return;
-    return await Tagger.createFromCode(absPath, relPath, lang, code);
-  }
 
   static async createFromCode(absPath: string, relPath: string, lang: string, code: string) {
-    const qFnName = langmaps.getQueryFileName(lang);
+    const ast = await AST.createFromCode(absPath, relPath, lang, code);
+    if (!ast) return;
+    return Tagger.create(ast)!;
+  }
+
+  static async create(ast: AST) {
+    const qFnName = langmaps.getQueryFileName(ast.treeSitter.language);
     if (!qFnName) return;
     const scmFname = path.join(__dirname, 'queries', qFnName);
     if (!fs.existsSync(scmFname)) return;
     const queryScm = fs.readFileSync(scmFname, 'utf8');
-    const moduleName = langmaps.getWasmPath(lang);
-    if (!moduleName) return;
-    const wasmPath = path.join(__dirname, '../assets/wasms', moduleName);
-    if (!fs.existsSync(wasmPath)) return;
-    await parserInitPromise;
-    const languageWasm = await Parser.Language.load(wasmPath);
-    const parser = new Parser();
-    if (!languageWasm) return;
-    parser.setLanguage(languageWasm);
-    return new Tagger(absPath, relPath, parser, queryScm, code);
+    return new Tagger(ast, queryScm);
   }
 
-  constructor(absPath: string, relPath: string, parser: Parser, queryScm: string, code: string) {
-    this.absPath = absPath;
-    this.relPath = relPath;
-    this.parser = parser;
-    this.queryScm = queryScm;
-    this.code = code;
+  constructor(ast: AST, querySCM: string) {
+    this.ast = ast;
+    this.queryScm = querySCM;
   }
 
   read(): Tag[] {
-    const tree = this.parser.parse(this.code);
-    const query = this.parser.getLanguage().query(this.queryScm);
-    const captures = query.captures(tree.rootNode);
-    return captures
+    return this.ast
+      .captures(this.queryScm)
       .map(({ node, name }: { node: any; name: string }) => {
         const kind = _getKind(name);
         return kind
           ? ({
-              relPath: this.relPath,
-              absPath: this.absPath,
+              relPath: this.ast.relPath,
+              absPath: this.ast.absPath,
               text: node.text,
               kind: kind,
               start: {
