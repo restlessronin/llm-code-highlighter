@@ -42,7 +42,7 @@ export class Tagger {
   static async create(absPath: string, relPath: string) {
     const lang = langmaps.getLinguistLanguage(absPath);
     if (!lang) return;
-    return this.createLang(absPath, relPath, lang);
+    return Tagger.createLang(absPath, relPath, lang);
   }
 
   static async createLang(absPath: string, relPath: string, lang: string) {
