@@ -3,6 +3,8 @@
   .
   (function_declaration
     name: (identifier) @name.definition.function) @definition.function
+  (#strip! @doc "^//\\s*")
+  (#set-adjacent! @doc @definition.function)
 )
 
 (
@@ -10,6 +12,8 @@
   .
   (method_declaration
     name: (field_identifier) @name.definition.method) @definition.method
+  (#strip! @doc "^//\\s*")
+  (#set-adjacent! @doc @definition.method)
 )
 
 (call_expression
