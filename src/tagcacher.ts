@@ -43,7 +43,7 @@ export class TagCacher {
     if (value && value.mtime === fileMtime) {
       return value.data;
     }
-    const tagger = await Tagger.create(absPath, relPath);
+    const tagger = await Tagger.createFromPath(absPath, relPath);
     if (!tagger) return [];
     const data = tagger.read();
     this.cache[absPath] = { mtime: fileMtime, data: data };

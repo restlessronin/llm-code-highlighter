@@ -32,8 +32,15 @@ export class Tagger {
   readonly ast: AST;
   readonly queryScm: string;
 
-  static async createFromCode(absPath: string, relPath: string, lang: string, code: string) {
-    const ast = await AST.createFromCode(absPath, relPath, lang, code);
+  static async createFromPath(absPath: string, relPath: string) {
+    const language = langmaps.getLinguistLanguage(absPath);
+    if (!language) return;
+    const code = fs.readFileSync(absPath, 'utf8');
+    return Tagger.createFromCode(absPath, relPath, language, code);
+  }
+
+  static async createFromCode(absPath: string, relPath: string, language: string, code: string) {
+    const ast = await AST.createFromCode(absPath, relPath, language, code);
     if (!ast) return;
     return Tagger.create(ast)!;
   }
