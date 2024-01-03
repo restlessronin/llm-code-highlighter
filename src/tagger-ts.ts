@@ -1,7 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import Parser from 'web-tree-sitter';
 import * as langmaps from './langmaps';
+
+import Parser from 'web-tree-sitter';
+
+const parserInitPromise = Parser.init();
 
 function _getKind(tag: string) {
   if (tag.startsWith('name.definition.')) {
@@ -56,11 +59,12 @@ export class Tagger {
     const queryScm = fs.readFileSync(scmFname, 'utf8');
     const moduleName = langmaps.getWasmPath(lang);
     if (!moduleName) return;
-    const wasmPath = path.join(__dirname, '../assets/wasms', moduleName);
+    const wasmPath = path.join(__dirname, '../assets/wasms', 'tree-sitter-javascript.wasm');
     if (!fs.existsSync(wasmPath)) return;
+    await parserInitPromise;
     const languageWasm = await Parser.Language.load(wasmPath);
-    if (!languageWasm) return;
     const parser = new Parser();
+    if (!languageWasm) return;
     parser.setLanguage(languageWasm);
     return new Tagger(absPath, relPath, parser, queryScm, code);
   }
