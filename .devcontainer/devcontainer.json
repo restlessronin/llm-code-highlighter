@@ -11,10 +11,9 @@
         "dbaeumer.vscode-eslint",
         "ms-vscode.vscode-typescript-tslint-plugin",
         "esbenp.prettier-vscode",
-        "GitHub.copilot",
-        "GitHub.copilot-chat",
         "eamodio.gitlens",
-        "redhat.vscode-yaml"
+        "redhat.vscode-yaml",
+        "sourcegraph.cody-ai"
       ]
     }
   },
