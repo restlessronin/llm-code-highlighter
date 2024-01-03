@@ -10,8 +10,8 @@ function _getMtime(absPath: string): number | undefined {
   }
 }
 
-export async function createDefRefs(TagCacher: TagCacher, absPath: string, relPath: string) {
-  const tags = await TagCacher.getTags(absPath, relPath);
+export async function createDefRefs(tagCacher: TagCacher, absPath: string, relPath: string) {
+  const tags = await tagCacher.getTags(absPath, relPath);
   const defs = tags.filter(tag => tag.kind === 'def');
   const refs = tags.filter(tag => tag.kind === 'ref');
   return [relPath, defs, refs] as [string, Tag[], Tag[]];
@@ -45,7 +45,7 @@ export class TagCacher {
     }
     const tagger = await Tagger.create(absPath, relPath);
     if (!tagger) return [];
-    const data = await tagger.read();
+    const data = tagger.read();
     this.cache[absPath] = { mtime: fileMtime, data: data };
     return data;
   }
