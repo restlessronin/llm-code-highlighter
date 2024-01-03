@@ -59,7 +59,7 @@ export class Tagger {
     const queryScm = fs.readFileSync(scmFname, 'utf8');
     const moduleName = langmaps.getWasmPath(lang);
     if (!moduleName) return;
-    const wasmPath = path.join(__dirname, '../assets/wasms', 'tree-sitter-javascript.wasm');
+    const wasmPath = path.join(__dirname, '../assets/wasms', moduleName);
     if (!fs.existsSync(wasmPath)) return;
     await parserInitPromise;
     const languageWasm = await Parser.Language.load(wasmPath);
