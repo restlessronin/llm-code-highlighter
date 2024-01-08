@@ -50,7 +50,7 @@ export class AST {
 
   constructor(
     readonly treeSitter: TreeSitter,
-    readonly tree: Parser.Tree,
+    public readonly tree: Parser.Tree,
     readonly absPath: string,
     readonly relPath: string
   ) {}
