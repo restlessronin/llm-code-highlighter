@@ -1,5 +1,5 @@
 import { RepoSummarizer } from './reposummarizer'; // Adjust the path as needed
-import { TagRanker } from './tagranker';
+import { TagRanker } from './reposummary';
 import { glob } from 'glob';
 import { resolve } from 'path';
 
