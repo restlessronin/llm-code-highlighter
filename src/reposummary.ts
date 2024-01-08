@@ -1,7 +1,7 @@
 import assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { Tag, Tagger } from './tagger-ts';
 
 import MultiGraph from 'graphology';
@@ -15,14 +15,7 @@ function _getMtime(absPath: string): number | undefined {
   }
 }
 
-export async function createDefRefs(tagCacher: TagCacher, absPath: string, relPath: string) {
-  const tags = await tagCacher.getTags(absPath, relPath);
-  const defs = tags.filter(tag => tag.kind === 'def');
-  const refs = tags.filter(tag => tag.kind === 'ref');
-  return [relPath, defs, refs] as [string, Tag[], Tag[]];
-}
-
-export class TagCacher {
+class TagCacher {
   static readonly CACHE_FILE_NAME: string = 'tags.cache.json';
 
   static create(workspacePath: string) {
@@ -79,6 +72,13 @@ function _add<K, V>(map: Map<K, Set<V>>, key: K, value: V): void {
 function _push<K, V>(map: Map<K, V[]>, key: K, value: V): void {
   if (!map.has(key)) map.set(key, []);
   map.get(key)?.push(value);
+}
+
+async function createDefRefs(tagCacher: TagCacher, absPath: string, relPath: string) {
+  const tags = await tagCacher.getTags(absPath, relPath);
+  const defs = tags.filter(tag => tag.kind === 'def');
+  const refs = tags.filter(tag => tag.kind === 'ref');
+  return [relPath, defs, refs] as [string, Tag[], Tag[]];
 }
 
 export class TagRanker {
