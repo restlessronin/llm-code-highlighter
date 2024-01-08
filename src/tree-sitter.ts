@@ -1,14 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as langmaps from './langmaps';
-
 import Parser from 'web-tree-sitter';
 
 const parserInitPromise = Parser.init();
 
-export { Parser };
-
-export class TreeSitter {
+class TreeSitter {
   static async create(language: string) {
     const moduleName = langmaps.getWasmPath(language);
     if (!moduleName) return;
@@ -28,6 +25,8 @@ export class TreeSitter {
     return this.parser.parse(code);
   }
 }
+
+export { Parser };
 
 export class AST {
   static async create(absPath: string, relPath: string) {
