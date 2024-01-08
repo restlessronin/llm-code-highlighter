@@ -6,7 +6,7 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
     apt-get install -y git-lfs &&\
     git lfs install
 
-RUN npm install -g pnpm jest typescript
+RUN npm install -g jest typescript
 
 WORKDIR /workspace
 
