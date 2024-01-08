@@ -9,9 +9,6 @@ const parserInitPromise = Parser.init();
 export { Parser };
 
 export class TreeSitter {
-  readonly parser: Parser;
-  readonly language: string;
-
   static async create(language: string) {
     const moduleName = langmaps.getWasmPath(language);
     if (!moduleName) return;
@@ -25,10 +22,7 @@ export class TreeSitter {
     return new TreeSitter(parser, language);
   }
 
-  constructor(parser: Parser, language: any) {
-    this.parser = parser;
-    this.language = language;
-  }
+  constructor(readonly parser: Parser, readonly language: any) {}
 
   parse(code: string): Parser.Tree {
     return this.parser.parse(code);
@@ -36,12 +30,6 @@ export class TreeSitter {
 }
 
 export class AST {
-  readonly treeSitter: TreeSitter;
-  readonly absPath: string;
-  readonly relPath: string;
-  readonly code: string;
-  readonly tree: Parser.Tree;
-
   static async create(absPath: string, relPath: string) {
     const lang = langmaps.getLinguistLanguage(absPath);
     if (!lang) return;
@@ -62,18 +50,12 @@ export class AST {
   }
 
   constructor(
-    treeSitter: TreeSitter,
-    absPath: string,
-    relPath: string,
-    code: string,
-    tree: Parser.Tree
-  ) {
-    this.treeSitter = treeSitter;
-    this.absPath = absPath;
-    this.relPath = relPath;
-    this.code = code;
-    this.tree = tree;
-  }
+    readonly treeSitter: TreeSitter,
+    readonly absPath: string,
+    readonly relPath: string,
+    readonly code: string,
+    readonly tree: Parser.Tree
+  ) {}
 
   captures(queryScm: string): Parser.QueryCapture[] {
     const query = this.treeSitter.parser.getLanguage().query(queryScm);

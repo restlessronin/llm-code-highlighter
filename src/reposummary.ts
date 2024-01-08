@@ -25,9 +25,6 @@ export async function createDefRefs(tagCacher: TagCacher, absPath: string, relPa
 export class TagCacher {
   static readonly CACHE_FILE_NAME: string = 'tags.cache.json';
 
-  readonly workspacePath: string;
-  readonly cache: { [key: string]: { mtime: number; data: Tag[] } };
-
   static create(workspacePath: string) {
     const cacheFileName = path.join(workspacePath, TagCacher.CACHE_FILE_NAME);
     const cache = fs.existsSync(cacheFileName)
@@ -36,10 +33,10 @@ export class TagCacher {
     return new TagCacher(workspacePath, cache);
   }
 
-  constructor(workspacePath: string, cache: { [key: string]: { mtime: number; data: Tag[] } }) {
-    this.workspacePath = workspacePath;
-    this.cache = cache;
-  }
+  constructor(
+    readonly workspacePath: string,
+    readonly cache: { [key: string]: { mtime: number; data: Tag[] } }
+  ) {}
 
   async getTags(absPath: string, relPath: string): Promise<Tag[]> {
     const fileMtime = _getMtime(absPath);
@@ -85,16 +82,6 @@ function _push<K, V>(map: Map<K, V[]>, key: K, value: V): void {
 }
 
 export class TagRanker {
-  readonly workspacePath: string;
-  readonly relPaths: string[];
-
-  readonly defines: Map<string, Set<string>>;
-  readonly definitions: Map<string, Set<Tag>>;
-  readonly references: Map<string, string[]>;
-  readonly identifiers: string[];
-  readonly ranked: string[];
-  readonly rankedDefinitions: Map<string, number>;
-
   static async create(workspacePath: string, absPaths: string[]) {
     const tagCacher = TagCacher.create(workspacePath);
     const relPaths = absPaths.map(absPath => path.relative(workspacePath, absPath));
@@ -133,24 +120,15 @@ export class TagRanker {
   }
 
   constructor(
-    workspacePath: string,
-    relPaths: string[],
-    defines: Map<string, Set<string>>,
-    definitions: Map<string, Set<any>>,
-    references: Map<string, string[]>,
-    identifiers: string[],
-    ranked: string[] = [],
-    rankedDefinitions: Map<string, number> = new Map<string, number>()
-  ) {
-    this.workspacePath = workspacePath;
-    this.relPaths = relPaths;
-    this.defines = defines;
-    this.definitions = definitions;
-    this.references = references;
-    this.identifiers = identifiers;
-    this.ranked = ranked;
-    this.rankedDefinitions = rankedDefinitions;
-  }
+    readonly workspacePath: string,
+    readonly relPaths: string[],
+    readonly defines: Map<string, Set<string>>,
+    readonly definitions: Map<string, Set<any>>,
+    readonly references: Map<string, string[]>,
+    readonly identifiers: string[],
+    readonly ranked: string[] = [],
+    readonly rankedDefinitions: Map<string, number> = new Map<string, number>()
+  ) {}
 
   rank() {
     const G = new MultiGraph();

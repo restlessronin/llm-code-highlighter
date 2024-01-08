@@ -29,9 +29,6 @@ export type Tag = {
 };
 
 export class Tagger {
-  readonly ast: AST;
-  readonly queryScm: string;
-
   static async createFromPath(absPath: string, relPath: string) {
     const language = langmaps.getLinguistLanguage(absPath);
     if (!language) return;
@@ -54,10 +51,7 @@ export class Tagger {
     return new Tagger(ast, queryScm);
   }
 
-  constructor(ast: AST, querySCM: string) {
-    this.ast = ast;
-    this.queryScm = querySCM;
-  }
+  constructor(readonly ast: AST, readonly queryScm: string) {}
 
   read(): Tag[] {
     return this.ast
