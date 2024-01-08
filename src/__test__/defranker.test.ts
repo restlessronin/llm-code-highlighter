@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { TagRanker } from '../reposummary';
+import { TagRanker } from '../defranker';
 
 describe('TagRanker', () => {
   let tagRanker: TagRanker;
