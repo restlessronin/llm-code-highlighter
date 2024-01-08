@@ -30,6 +30,7 @@
     "linguist-languages": "^7.27.0",
     "lodash": "^4.17.21",
     "path": "^0.12.7",
+    "tree-sitter-wasms": "^0.1.5",
     "web-tree-sitter": "^0.20.8"
   }
 }

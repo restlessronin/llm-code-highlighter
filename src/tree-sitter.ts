@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import * as path from 'path';
 import * as langmaps from './langmaps';
 import Parser from 'web-tree-sitter';
 
@@ -9,7 +8,7 @@ class TreeSitter {
   static async create(language: string) {
     const moduleName = langmaps.getWasmPath(language);
     if (!moduleName) return;
-    const wasmPath = path.join(__dirname, '../assets/wasms', moduleName);
+    const wasmPath = require.resolve('tree-sitter-wasms/out/' + moduleName);
     if (!fs.existsSync(wasmPath)) return;
     await parserInitPromise;
     const languageWasm = await Parser.Language.load(wasmPath);
