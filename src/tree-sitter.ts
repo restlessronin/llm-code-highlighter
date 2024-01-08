@@ -29,31 +29,30 @@ class TreeSitter {
 export { Parser };
 
 export class AST {
-  static async create(absPath: string, relPath: string) {
+  static async create([absPath, relPath]: [string, string]) {
     const lang = langmaps.getLinguistLanguage(absPath);
     if (!lang) return;
-    return AST.createLang(absPath, relPath, lang);
+    return AST.createLang([absPath, relPath], lang);
   }
 
-  static async createLang(absPath: string, relPath: string, lang: string) {
+  static async createLang([absPath, relPath]: [string, string], lang: string) {
     const code = fs.readFileSync(absPath, 'utf8');
     if (!code) return;
-    return await AST.createFromCode(absPath, relPath, lang, code);
+    return await AST.createFromCode([absPath, relPath], lang, code);
   }
 
-  static async createFromCode(absPath: string, relPath: string, lang: string, code: string) {
+  static async createFromCode([absPath, relPath]: [string, string], lang: string, code: string) {
     const treeSitter = await TreeSitter.create(lang);
     if (!treeSitter) return;
     const tree = treeSitter.parse(code);
-    return new AST(treeSitter, absPath, relPath, code, tree);
+    return new AST(treeSitter, tree, absPath, relPath);
   }
 
   constructor(
     readonly treeSitter: TreeSitter,
+    readonly tree: Parser.Tree,
     readonly absPath: string,
-    readonly relPath: string,
-    readonly code: string,
-    readonly tree: Parser.Tree
+    readonly relPath: string
   ) {}
 
   captures(queryScm: string): Parser.QueryCapture[] {

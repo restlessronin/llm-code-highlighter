@@ -29,15 +29,15 @@ export type Tag = {
 };
 
 export class Tagger {
-  static async createFromPath(absPath: string, relPath: string) {
+  static async createFromPath([absPath, relPath]: [string, string]) {
     const language = langmaps.getLinguistLanguage(absPath);
     if (!language) return;
     const code = fs.readFileSync(absPath, 'utf8');
-    return Tagger.createFromCode(absPath, relPath, language, code);
+    return Tagger.createFromCode([absPath, relPath], language, code);
   }
 
-  static async createFromCode(absPath: string, relPath: string, language: string, code: string) {
-    const ast = await AST.createFromCode(absPath, relPath, language, code);
+  static async createFromCode(path: [string, string], language: string, code: string) {
+    const ast = await AST.createFromCode(path, language, code);
     if (!ast) return;
     return Tagger.create(ast)!;
   }

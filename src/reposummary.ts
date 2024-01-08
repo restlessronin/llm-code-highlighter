@@ -31,14 +31,14 @@ class TagCacher {
     readonly cache: { [key: string]: { mtime: number; data: Tag[] } }
   ) {}
 
-  async getTags(absPath: string, relPath: string): Promise<Tag[]> {
+  async getTags([absPath, relPath]: [string, string]): Promise<Tag[]> {
     const fileMtime = _getMtime(absPath);
     if (!fileMtime) return [];
     const value = this.cache[absPath];
     if (value && value.mtime === fileMtime) {
       return value.data;
     }
-    const tagger = await Tagger.createFromPath(absPath, relPath);
+    const tagger = await Tagger.createFromPath([absPath, relPath]);
     if (!tagger) return [];
     const data = tagger.read();
     this.cache[absPath] = { mtime: fileMtime, data: data };
@@ -74,8 +74,8 @@ function _push<K, V>(map: Map<K, V[]>, key: K, value: V): void {
   map.get(key)?.push(value);
 }
 
-async function createDefRefs(tagCacher: TagCacher, absPath: string, relPath: string) {
-  const tags = await tagCacher.getTags(absPath, relPath);
+async function createDefRefs(tagCacher: TagCacher, [absPath, relPath]: [string, string]) {
+  const tags = await tagCacher.getTags([absPath, relPath]);
   const defs = tags.filter(tag => tag.kind === 'def');
   const refs = tags.filter(tag => tag.kind === 'ref');
   return [relPath, defs, refs] as [string, Tag[], Tag[]];
@@ -87,9 +87,7 @@ export class TagRanker {
     const relPaths = absPaths.map(absPath => path.relative(workspacePath, absPath));
     const absRelPaths = _.zip(absPaths, relPaths) as [string, string][];
     const defRefs = await Promise.all(
-      absRelPaths.map(
-        async ([absPath, relPath]) => await createDefRefs(tagCacher, absPath, relPath)
-      )
+      absRelPaths.map(async path => await createDefRefs(tagCacher, path))
     );
     tagCacher.writeCache();
     const defines = new Map<string, Set<string>>();
