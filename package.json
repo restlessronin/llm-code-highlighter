@@ -1,7 +1,7 @@
 {
-  "name": "code-context",
+  "name": "gauthier-repomap",
   "version": "0.0.1",
-  "description": "Extract code context from a repo to send to a coding LLM",
+  "description": "Create a 'map' of important LOC in a repo",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
