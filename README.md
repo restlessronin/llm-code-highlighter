@@ -1,6 +1,8 @@
 # gauthier-repomap
 
-gauthier-repomap is a TypeScript library for creating advanced repository maps, inspired by the methodology created by Paul Gauthier and outlined [in the Aider Chat docs](https://aider.chat/docs/repomap.html). The approach significantly improves upon traditional methods, providing a more nuanced understanding and aiding in the effective navigation and editing of large repositories.
+gauthier-repomap is a TypeScript library for creating advanced repository maps, inspired by the methodology created by Paul Gauthier and outlined [in the Aider Chat docs](https://aider.chat/docs/repomap.html).
+
+This typescript version of the original [Aider Python code](https://github.com/paul-gauthier/aider) was created with very significant assistance from ChatGPT 4.
 
 ## Installation
 
