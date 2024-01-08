@@ -1,5 +1,5 @@
 {
-  "name": "code-context",
+  "name": "gauthier-repomap",
   "dockerFile": "Dockerfile",
   "forwardPorts": [3000],
   "customizations": {
