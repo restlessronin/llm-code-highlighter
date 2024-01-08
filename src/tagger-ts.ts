@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as langmaps from './langmaps';
-import { AST } from './ast-ts';
+import { AST } from './tree-sitter';
 
 function _getKind(tag: string) {
   if (tag.startsWith('name.definition.')) {
