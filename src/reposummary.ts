@@ -1,11 +1,65 @@
 import assert from 'assert';
+import * as fs from 'fs';
 import * as path from 'path';
 import * as _ from 'lodash';
-import { Tag } from './tagger-ts';
-import * as tc from './tagcacher';
+import { Tag, Tagger } from './tagger-ts';
 
 import MultiGraph from 'graphology';
 import pagerank from 'graphology-metrics/centrality/pagerank';
+
+function _getMtime(absPath: string): number | undefined {
+  try {
+    return fs.statSync(absPath).mtimeMs;
+  } catch (e) {
+    return;
+  }
+}
+
+export async function createDefRefs(tagCacher: TagCacher, absPath: string, relPath: string) {
+  const tags = await tagCacher.getTags(absPath, relPath);
+  const defs = tags.filter(tag => tag.kind === 'def');
+  const refs = tags.filter(tag => tag.kind === 'ref');
+  return [relPath, defs, refs] as [string, Tag[], Tag[]];
+}
+
+export class TagCacher {
+  static readonly CACHE_FILE_NAME: string = 'tags.cache.json';
+
+  readonly workspacePath: string;
+  readonly cache: { [key: string]: { mtime: number; data: Tag[] } };
+
+  static create(workspacePath: string) {
+    const cacheFileName = path.join(workspacePath, TagCacher.CACHE_FILE_NAME);
+    const cache = fs.existsSync(cacheFileName)
+      ? JSON.parse(fs.readFileSync(cacheFileName, 'utf8'))
+      : {};
+    return new TagCacher(workspacePath, cache);
+  }
+
+  constructor(workspacePath: string, cache: { [key: string]: { mtime: number; data: Tag[] } }) {
+    this.workspacePath = workspacePath;
+    this.cache = cache;
+  }
+
+  async getTags(absPath: string, relPath: string): Promise<Tag[]> {
+    const fileMtime = _getMtime(absPath);
+    if (!fileMtime) return [];
+    const value = this.cache[absPath];
+    if (value && value.mtime === fileMtime) {
+      return value.data;
+    }
+    const tagger = await Tagger.createFromPath(absPath, relPath);
+    if (!tagger) return [];
+    const data = tagger.read();
+    this.cache[absPath] = { mtime: fileMtime, data: data };
+    return data;
+  }
+
+  writeCache() {
+    const cacheFileName = path.join(this.workspacePath, TagCacher.CACHE_FILE_NAME);
+    fs.writeFileSync(cacheFileName, JSON.stringify(this.cache), 'utf8');
+  }
+}
 
 class _Counter extends Map<string, number> {
   constructor(iterable: Iterable<string> = []) {
@@ -42,12 +96,12 @@ export class TagRanker {
   readonly rankedDefinitions: Map<string, number>;
 
   static async create(workspacePath: string, absPaths: string[]) {
-    const tagCacher = tc.TagCacher.create(workspacePath);
+    const tagCacher = TagCacher.create(workspacePath);
     const relPaths = absPaths.map(absPath => path.relative(workspacePath, absPath));
     const absRelPaths = _.zip(absPaths, relPaths) as [string, string][];
     const defRefs = await Promise.all(
       absRelPaths.map(
-        async ([absPath, relPath]) => await tc.createDefRefs(tagCacher, absPath, relPath)
+        async ([absPath, relPath]) => await createDefRefs(tagCacher, absPath, relPath)
       )
     );
     tagCacher.writeCache();
