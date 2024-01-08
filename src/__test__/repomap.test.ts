@@ -11,12 +11,15 @@ describe('CodeMapper', () => {
 
 def my_function(arg1, arg2):
     return arg1 * arg2`,
-      [1, 4]
+      [0, 4]
     );
     console.log(repomap);
-    const expectedOutput = `⋮...\n█2:     def my_method(self, arg1, arg2):
-⋮...\n█5: def my_function(arg1, arg2):
-⋮...\n`;
+    const expectedOutput = `█1: class MyClass:
+│2:     def my_method(self, arg1, arg2):
+⋮...
+█5: def my_function(arg1, arg2):
+⋮...
+`;
     expect(repomap).toBe(expectedOutput);
   });
 });
