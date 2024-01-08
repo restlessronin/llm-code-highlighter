@@ -1,12 +1,11 @@
 {
   "name": "gauthier-repomap",
   "version": "0.0.1",
-  "description": "Create a 'map' of important LOC in a repo",
+  "description": "Enhance codebase understanding with gauthier-repomap: a tree-sitter based tool for creating detailed repomaps from source code, aiding in AI-assisted coding.",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
-    "start": "node dist/index.js"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "restlessronin",
