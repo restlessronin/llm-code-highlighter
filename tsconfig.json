@@ -4,6 +4,7 @@
     "target": "es6",
     "types": ["node", "jest"],
     "strict": true,
+    "declaration": true,
     "sourceMap": true,
     "esModuleInterop": true,
     "outDir": "dist",
