@@ -11,7 +11,7 @@
   "author": "restlessronin",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^29.5.11",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20.10.5",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
@@ -19,9 +19,9 @@
     "eslint": "^8.56.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.1.0",
-    "jest": "^26.6.3",
-    "ts-jest": "^26.5.6",
-    "typescript": "^4.9.5"
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "glob": "^10.3.10",
@@ -30,7 +30,7 @@
     "linguist-languages": "^7.27.0",
     "lodash": "^4.17.21",
     "path": "^0.12.7",
-    "tree-sitter-wasms": "^0.1.5",
+    "tree-sitter-wasms": "^0.1.6",
     "web-tree-sitter": "^0.20.8"
   }
 }
