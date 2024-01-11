@@ -1,55 +1,11 @@
 import assert from 'assert';
-import * as fs from 'fs';
 import * as path from 'path';
 import _ from 'lodash';
 import { Tag, Tagger } from './tagger-ts';
+import { ITagCacher } from './tagcacher';
 
 import MultiGraph from 'graphology';
 import pagerank from 'graphology-metrics/centrality/pagerank';
-
-function _getMtime(absPath: string): number | undefined {
-  try {
-    return fs.statSync(absPath).mtimeMs;
-  } catch (e) {
-    return;
-  }
-}
-
-class TagCacher {
-  static readonly CACHE_FILE_NAME: string = 'tags.cache.json';
-
-  static create(workspacePath: string) {
-    const cacheFileName = path.join(workspacePath, TagCacher.CACHE_FILE_NAME);
-    const cache = fs.existsSync(cacheFileName)
-      ? JSON.parse(fs.readFileSync(cacheFileName, 'utf8'))
-      : {};
-    return new TagCacher(workspacePath, cache);
-  }
-
-  constructor(
-    readonly workspacePath: string,
-    readonly cache: { [key: string]: { mtime: number; data: Tag[] } }
-  ) {}
-
-  async getTags([absPath, relPath]: [string, string]): Promise<Tag[]> {
-    const fileMtime = _getMtime(absPath);
-    if (!fileMtime) return [];
-    const value = this.cache[absPath];
-    if (value && value.mtime === fileMtime) {
-      return value.data;
-    }
-    const tagger = await Tagger.createFromPath([absPath, relPath]);
-    if (!tagger) return [];
-    const data = tagger.read();
-    this.cache[absPath] = { mtime: fileMtime, data: data };
-    return data;
-  }
-
-  writeCache() {
-    const cacheFileName = path.join(this.workspacePath, TagCacher.CACHE_FILE_NAME);
-    fs.writeFileSync(cacheFileName, JSON.stringify(this.cache), 'utf8');
-  }
-}
 
 class _Counter extends Map<string, number> {
   constructor(iterable: Iterable<string> = []) {
@@ -74,7 +30,7 @@ function _push<K, V>(map: Map<K, V[]>, key: K, value: V): void {
   map.get(key)?.push(value);
 }
 
-async function createDefRefs(tagCacher: TagCacher, [absPath, relPath]: [string, string]) {
+async function createDefRefs(tagCacher: ITagCacher, [absPath, relPath]: [string, string]) {
   const tags = await tagCacher.getTags([absPath, relPath]);
   const defs = tags.filter(tag => tag.kind === 'def');
   const refs = tags.filter(tag => tag.kind === 'ref');
@@ -82,9 +38,8 @@ async function createDefRefs(tagCacher: TagCacher, [absPath, relPath]: [string, 
 }
 
 export class TagRanker {
-  static async create(workspacePath: string, absPaths: string[]) {
-    const tagCacher = TagCacher.create(workspacePath);
-    const relPaths = absPaths.map(absPath => path.relative(workspacePath, absPath));
+  static async create(tagCacher: ITagCacher, absPaths: string[]) {
+    const relPaths = absPaths.map(absPath => path.relative(tagCacher.workspacePath, absPath));
     const absRelPaths = _.zip(absPaths, relPaths) as [string, string][];
     const defRefs = await Promise.all(
       absRelPaths.map(async path => await createDefRefs(tagCacher, path))
@@ -114,7 +69,14 @@ export class TagRanker {
       });
     }
     const identifiers = Array.from(defines.keys()).filter(key => references.has(key));
-    return new TagRanker(workspacePath, relPaths, defines, definitions, references, identifiers);
+    return new TagRanker(
+      tagCacher.workspacePath,
+      relPaths,
+      defines,
+      definitions,
+      references,
+      identifiers
+    );
   }
 
   constructor(

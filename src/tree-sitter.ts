@@ -9,7 +9,6 @@ class TreeSitter {
     const moduleName = langmaps.getWasmPath(language);
     if (!moduleName) return;
     const wasmPath = require.resolve('tree-sitter-wasms/out/' + moduleName);
-    if (!fs.existsSync(wasmPath)) return;
     await parserInitPromise;
     const languageWasm = await Parser.Language.load(wasmPath);
     const parser = new Parser();
@@ -28,21 +27,8 @@ class TreeSitter {
 export { Parser };
 
 export class AST {
-  static async create([absPath, relPath]: [string, string]) {
-    const lang = langmaps.getLinguistLanguage(absPath);
-    if (!lang) return;
-    return AST.createLang([absPath, relPath], lang);
-  }
-
-  static async createLang([absPath, relPath]: [string, string], lang: string) {
-    const code = fs.readFileSync(absPath, 'utf8');
-    if (!code) return;
-    return await AST.createFromCode([absPath, relPath], lang, code);
-  }
-
   static async createFromCode([absPath, relPath]: [string, string], lang: string, code: string) {
-    const treeSitter = await TreeSitter.create(lang);
-    if (!treeSitter) return;
+    const treeSitter = (await TreeSitter.create(lang))!;
     const tree = treeSitter.parse(code);
     return new AST(treeSitter, tree, absPath, relPath);
   }

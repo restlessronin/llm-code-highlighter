@@ -1,6 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as langmaps from './langmaps';
 import { AST } from './tree-sitter';
 
 function _getKind(tag: string) {
@@ -29,25 +26,7 @@ export type Tag = {
 };
 
 export class Tagger {
-  static async createFromPath([absPath, relPath]: [string, string]) {
-    const language = langmaps.getLinguistLanguage(absPath);
-    if (!language) return;
-    const code = fs.readFileSync(absPath, 'utf8');
-    return Tagger.createFromCode([absPath, relPath], language, code);
-  }
-
-  static async createFromCode(path: [string, string], language: string, code: string) {
-    const ast = await AST.createFromCode(path, language, code);
-    if (!ast) return;
-    return Tagger.create(ast)!;
-  }
-
-  static async create(ast: AST) {
-    const qFnName = langmaps.getQueryFileName(ast.treeSitter.language);
-    if (!qFnName) return;
-    const scmFname = path.join(__dirname, 'queries', qFnName);
-    if (!fs.existsSync(scmFname)) return;
-    const queryScm = fs.readFileSync(scmFname, 'utf8');
+  static create(ast: AST, queryScm: string) {
     return new Tagger(ast, queryScm);
   }
 

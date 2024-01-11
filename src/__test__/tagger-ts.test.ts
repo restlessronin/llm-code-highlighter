@@ -1,4 +1,6 @@
+import { AST } from '../tree-sitter';
 import { Tagger } from '../tagger-ts';
+import { createTagger } from '../tagcacher.node';
 
 describe('Tagger', () => {
   let tagger: Tagger;
@@ -7,22 +9,20 @@ describe('Tagger', () => {
 
   describe('read for JavaScript file contents', () => {
     it('should return an empty array when there are no captures', async () => {
-      const tagger = await Tagger.createFromCode(
-        ['test.js', 'test.js'],
-        'JavaScript',
-        'let x = 1;'
-      )!;
+      const ast = await AST.createFromCode(['test.js', 'test.js'], 'JavaScript', 'let x = 1;');
+      const tagger = await createTagger(ast);
       const result = tagger?.read();
       expect(result).toEqual([]);
     });
 
     it('should return a single reference', async () => {
-      const tagger = await Tagger.createFromCode(
+      const ast = await AST.createFromCode(
         ['test.js', 'test.js'],
         'JavaScript',
         `let x = 1;
         console.log(x);`
-      )!;
+      );
+      const tagger = await createTagger(ast);
       const result = tagger?.read();
       expect(result).toEqual([
         {
