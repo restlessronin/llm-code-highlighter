@@ -1,6 +1,6 @@
 import { AST } from '../tree-sitter';
 import { Tagger } from '../tagger-ts';
-import { createTagger } from '../cachedfiletagextractor.node';
+import { createTagger } from '../cachedtagextractor.node';
 
 describe('Tagger', () => {
   let tagger: Tagger;
