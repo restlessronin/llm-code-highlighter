@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Tag, ITagCacher } from './tagcacher';
+import { Tag, ITagCacher } from './tagextractor';
 import { getLinguistLanguage, getQueryFileName } from './langmaps';
 import { AST } from './tree-sitter';
 import { Tagger } from './tagger-ts';
