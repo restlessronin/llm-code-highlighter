@@ -1,9 +1,9 @@
 import * as path from 'path';
-import { NodeTagCacher } from '../tagcacher.node';
+import { CachingTagExtactor } from '../cachingtagextractor.node';
 import { TagRanker } from '../defranker';
 
 describe('TagRanker', () => {
-  let tagCacher: NodeTagCacher;
+  let tagCacher: CachingTagExtactor;
   let tagRanker: TagRanker;
   let workspacePath: string;
   let absPaths: string[];
@@ -15,7 +15,7 @@ describe('TagRanker', () => {
       path.resolve(workspacePath, 'test_file_import.py'),
       path.resolve(workspacePath, 'test_file_pass.py'),
     ];
-    tagCacher = NodeTagCacher.create(workspacePath);
+    tagCacher = CachingTagExtactor.create(workspacePath);
     tagRanker = await TagRanker.create(tagCacher, absPaths);
   });
 

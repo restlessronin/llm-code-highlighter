@@ -2,7 +2,7 @@ import assert from 'assert';
 import * as path from 'path';
 import _ from 'lodash';
 import { Tag, Tagger } from './tagger-ts';
-import { ITagCacher } from './tagcacher';
+import { ITagExtractor } from './tagextractor';
 
 import MultiGraph from 'graphology';
 import pagerank from 'graphology-metrics/centrality/pagerank';
@@ -30,21 +30,20 @@ function _push<K, V>(map: Map<K, V[]>, key: K, value: V): void {
   map.get(key)?.push(value);
 }
 
-async function createDefRefs(tagCacher: ITagCacher, [absPath, relPath]: [string, string]) {
-  const tags = await tagCacher.getTags([absPath, relPath]);
+async function createDefRefs(tagGetter: ITagExtractor, [absPath, relPath]: [string, string]) {
+  const tags = await tagGetter.getTags([absPath, relPath]);
   const defs = tags.filter(tag => tag.kind === 'def');
   const refs = tags.filter(tag => tag.kind === 'ref');
   return [relPath, defs, refs] as [string, Tag[], Tag[]];
 }
 
 export class TagRanker {
-  static async create(tagCacher: ITagCacher, absPaths: string[]) {
-    const relPaths = absPaths.map(absPath => path.relative(tagCacher.workspacePath, absPath));
+  static async create(tagGetter: ITagExtractor, absPaths: string[]) {
+    const relPaths = absPaths.map(absPath => path.relative(tagGetter.workspacePath, absPath));
     const absRelPaths = _.zip(absPaths, relPaths) as [string, string][];
     const defRefs = await Promise.all(
-      absRelPaths.map(async path => await createDefRefs(tagCacher, path))
+      absRelPaths.map(async path => await createDefRefs(tagGetter, path))
     );
-    tagCacher.writeCache();
     const defines = new Map<string, Set<string>>();
     defRefs.forEach(([relPath, defs, _]) => {
       (defs as Tag[]).forEach(def => {
@@ -70,7 +69,7 @@ export class TagRanker {
     }
     const identifiers = Array.from(defines.keys()).filter(key => references.has(key));
     return new TagRanker(
-      tagCacher.workspacePath,
+      tagGetter.workspacePath,
       relPaths,
       defines,
       definitions,

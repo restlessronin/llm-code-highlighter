@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Tag, ITagCacher } from './tagextractor';
+import { Tag, ITagExtractor } from './tagextractor';
 import { getLinguistLanguage, getQueryFileName } from './langmaps';
 import { AST } from './tree-sitter';
 import { Tagger } from './tagger-ts';
@@ -29,15 +29,15 @@ function _getMtime(absPath: string): number | undefined {
   }
 }
 
-export class NodeTagCacher implements ITagCacher {
+export class CachingTagExtactor implements ITagExtractor {
   static readonly CACHE_FILE_NAME: string = 'tags.cache.json';
 
   static create(workspacePath: string) {
-    const cacheFileName = path.join(workspacePath, NodeTagCacher.CACHE_FILE_NAME);
+    const cacheFileName = path.join(workspacePath, CachingTagExtactor.CACHE_FILE_NAME);
     const cache = fs.existsSync(cacheFileName)
       ? JSON.parse(fs.readFileSync(cacheFileName, 'utf8'))
       : {};
-    return new NodeTagCacher(workspacePath, cache);
+    return new CachingTagExtactor(workspacePath, cache);
   }
 
   constructor(
@@ -62,7 +62,7 @@ export class NodeTagCacher implements ITagCacher {
   }
 
   writeCache() {
-    const cacheFileName = path.join(this.workspacePath, NodeTagCacher.CACHE_FILE_NAME);
+    const cacheFileName = path.join(this.workspacePath, CachingTagExtactor.CACHE_FILE_NAME);
     fs.writeFileSync(cacheFileName, JSON.stringify(this.cache), 'utf8');
   }
 }
