@@ -29,15 +29,15 @@ function _getMtime(absPath: string): number | undefined {
   }
 }
 
-export class CachingTagExtactor implements ITagExtractor {
+export class CachedFileTagExtractor implements ITagExtractor {
   static readonly CACHE_FILE_NAME: string = 'tags.cache.json';
 
   static create(workspacePath: string) {
-    const cacheFileName = path.join(workspacePath, CachingTagExtactor.CACHE_FILE_NAME);
+    const cacheFileName = path.join(workspacePath, CachedFileTagExtractor.CACHE_FILE_NAME);
     const cache = fs.existsSync(cacheFileName)
       ? JSON.parse(fs.readFileSync(cacheFileName, 'utf8'))
       : {};
-    return new CachingTagExtactor(workspacePath, cache);
+    return new CachedFileTagExtractor(workspacePath, cache);
   }
 
   constructor(
@@ -62,7 +62,7 @@ export class CachingTagExtactor implements ITagExtractor {
   }
 
   writeCache() {
-    const cacheFileName = path.join(this.workspacePath, CachingTagExtactor.CACHE_FILE_NAME);
+    const cacheFileName = path.join(this.workspacePath, CachedFileTagExtractor.CACHE_FILE_NAME);
     fs.writeFileSync(cacheFileName, JSON.stringify(this.cache), 'utf8');
   }
 }
