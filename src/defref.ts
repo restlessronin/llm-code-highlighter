@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { Tag } from './tagger-ts';
 import { TagRanker } from './tagranker';
+import { ITagExtractor } from './tagextractor';
 
 function _add<K, V>(map: Map<K, Set<V>>, key: K, value: V): void {
   if (!map.has(key)) map.set(key, new Set());
@@ -13,6 +14,24 @@ function _push<K, V>(map: Map<K, V[]>, key: K, value: V): void {
 }
 
 export type DefRef = { path: [string, string]; all: Tag[]; defs: Tag[]; refs: Tag[] };
+
+export async function createDefRefs(
+  tagGetter: ITagExtractor,
+  absPaths: string[],
+  relPaths: string[],
+  codes: string[]
+) {
+  const absRelPathCodes = _.zip(absPaths, relPaths, codes) as [string, string, string][];
+  const defRefs = await Promise.all(
+    absRelPathCodes.map(async ([absPath, relPath, code]) => {
+      const tags = await tagGetter.extractTags([absPath, relPath], code);
+      const defs = tags.filter(tag => tag.kind === 'def');
+      const refs = tags.filter(tag => tag.kind === 'ref');
+      return { path: [absPath, relPath], all: tags, defs: defs, refs: refs } as DefRef;
+    })
+  );
+  return new DefRefs(tagGetter.workspacePath, defRefs);
+}
 
 export class DefRefs {
   constructor(readonly workspacePath: string, readonly defRefs: DefRef[]) {}
