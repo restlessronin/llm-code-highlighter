@@ -1,7 +1,6 @@
 import * as path from 'path';
 import { CachedFileTagExtractor } from '../cachedtagextractor.node';
 import { TagRanker } from '../tagranker';
-import { DefRefs } from '../defref';
 import { createDefRefs } from '../defref.node';
 
 describe('TagRanker', () => {
