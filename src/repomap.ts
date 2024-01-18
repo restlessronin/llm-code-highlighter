@@ -100,7 +100,9 @@ class LineScopes {
   static create(numLines: number) {
     const nodes = new Array<Parser.SyntaxNode[]>(numLines).fill([]).map(() => []);
     const scopes = new Array(numLines).fill(new Set<number>());
-    const headers = new Array<[number, number, number][]>(numLines).fill([]).map(() => []);
+    const headers: [number, number, number][][] = new Array<[number, number, number][]>(numLines)
+      .fill([])
+      .map(() => []);
     return new LineScopes(numLines, nodes, scopes, headers);
   }
 
@@ -150,7 +152,7 @@ export async function createRepoMap(
   path: [string, string],
   language: string,
   code: string,
-  lines: number[]
+  linesOfInterest: number[]
 ) {
   const codeLines = code.split('\n');
   const ast = await AST.createFromCode(path, language, code);
@@ -158,7 +160,7 @@ export async function createRepoMap(
   const lineScopes = LineScopes.create(codeLines.length).init(ast.tree.rootNode);
   const header = lineScopes.toDominantBlock(mapOptions);
   const fileScopes = new FileScopes(codeLines, lineScopes.scopes, header);
-  const codeMapper = fileScopes.buildCodeMapper(lines);
+  const codeMapper = fileScopes.buildCodeMapper(linesOfInterest);
   if (!codeMapper) return;
   return codeMapper.withSmallGapsClosed().format();
 }
