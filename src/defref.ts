@@ -1,8 +1,5 @@
-import * as path from 'path';
 import _ from 'lodash';
-import { ITagExtractor } from './tagextractor';
 import { Tag } from './tagger-ts';
-import { abstractDensity } from 'graphology-metrics/graph';
 import { TagRanker } from './tagranker';
 
 function _add<K, V>(map: Map<K, Set<V>>, key: K, value: V): void {
@@ -28,7 +25,7 @@ export class DefRefs {
         _add(defines, def.text, relPath);
       });
     });
-    const definitions = new Map<string, Set<any>>();
+    const definitions = new Map<string, Set<Tag>>();
     this.defRefs.forEach(defRef => {
       const [_, relPath] = defRef.path;
       (defRef.defs as Tag[]).forEach(tag => {

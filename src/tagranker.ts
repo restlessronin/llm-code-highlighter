@@ -1,8 +1,6 @@
 import assert from 'assert';
-import * as path from 'path';
 import _ from 'lodash';
-import { Tag, Tagger } from './tagger-ts';
-import { ITagExtractor } from './tagextractor';
+import { Tag } from './tagger-ts';
 
 import MultiGraph from 'graphology';
 import pagerank from 'graphology-metrics/centrality/pagerank';
@@ -25,10 +23,10 @@ export class TagRanker {
     readonly workspacePath: string,
     readonly relPaths: string[],
     readonly defines: Map<string, Set<string>>,
-    readonly definitions: Map<string, Set<any>>,
+    readonly definitions: Map<string, Set<Tag>>,
     readonly references: Map<string, string[]>,
     readonly identifiers: string[],
-    readonly ranked: string[] = [],
+    readonly ranked: Record<string, number> = {},
     readonly rankedDefinitions: Map<string, number> = new Map<string, number>()
   ) {}
 
@@ -60,9 +58,10 @@ export class TagRanker {
         rankedDefinitions.set(key, (rankedDefinitions.get(key) as number) + defRank);
       });
     });
-    const ranked = Array.from(G.nodes()).sort(
-      (a, b) => G.getNodeAttribute(b, 'pagerank') - G.getNodeAttribute(a, 'pagerank')
-    );
+    const ranked = G.nodes().reduce((accumulator: Record<string, number>, node: string) => {
+      accumulator[node] = G.getNodeAttribute(node, 'pagerank') as number;
+      return accumulator;
+    }, {});
     return new TagRanker(
       this.workspacePath,
       this.relPaths,
@@ -89,20 +88,25 @@ export class TagRanker {
       (a, b) => b[1] - a[1]
     );
     const rankedTags: Tag[] = rankedDefinitionsArr
-      .filter(([key, rank]: [string, number]) => {
-        const [relPath, ident] = key.split(',');
+      .filter(([key, _rank]: [string, number]) => {
+        const [relPath, _ident] = key.split(',');
         return !chatRelPaths.includes(relPath as string);
       })
-      .reduce((acc: Tag[], [key, rank]: [string, number]) => {
+      .reduce((acc: Tag[], [key, _rank]: [string, number]) => {
         return [...acc, ...Array.from(this.definitions.get(key) as Set<Tag>)];
       }, []);
     const incRelPaths = rankedTags.map(rt => rt.relPath);
-    const ovlpRelPaths = this.ranked.filter(relPath => restRelPaths.includes(relPath));
+    const ovlpRelPaths = Object.entries(this.ranked)
+      .filter(([relPath, _]) => restRelPaths.includes(relPath))
+      .map(([relPath, _]) => relPath);
     const remnRelPaths = restRelPaths.filter(relPath => !ovlpRelPaths.includes(relPath));
-    const allRelPaths = [
-      ...this.ranked.filter(relPath => !incRelPaths.includes(relPath)),
-      ...this.ranked.filter(relPath => remnRelPaths.includes(relPath)),
-    ].map(relPath => ({ relPath: relPath } as Tag));
-    return [...rankedTags, ...allRelPaths];
+    const allRankedRelPaths = [
+      ...Object.entries(this.ranked).filter(([relPath, _]) => !incRelPaths.includes(relPath)),
+      ...Object.entries(this.ranked).filter(([relPath, _]) => remnRelPaths.includes(relPath)),
+    ];
+    const allRelPaths = allRankedRelPaths
+      .sort((a, b) => b[1] - a[1])
+      .map(([relPath, _]) => relPath);
+    return { rankedTags: rankedTags, relPaths: allRelPaths };
   }
 }
