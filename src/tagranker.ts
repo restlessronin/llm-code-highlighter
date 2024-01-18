@@ -20,64 +20,7 @@ class _Counter extends Map<string, number> {
   }
 }
 
-function _add<K, V>(map: Map<K, Set<V>>, key: K, value: V): void {
-  if (!map.has(key)) map.set(key, new Set());
-  map.get(key)?.add(value);
-}
-
-function _push<K, V>(map: Map<K, V[]>, key: K, value: V): void {
-  if (!map.has(key)) map.set(key, []);
-  map.get(key)?.push(value);
-}
-
-async function createDefRefs(tagGetter: ITagExtractor, [absPath, relPath]: [string, string]) {
-  const tags = await tagGetter.getTags([absPath, relPath]);
-  const defs = tags.filter(tag => tag.kind === 'def');
-  const refs = tags.filter(tag => tag.kind === 'ref');
-  return [relPath, defs, refs] as [string, Tag[], Tag[]];
-}
-
 export class TagRanker {
-  static async create(tagGetter: ITagExtractor, absPaths: string[]) {
-    const relPaths = absPaths.map(absPath => path.relative(tagGetter.workspacePath, absPath));
-    const absRelPaths = _.zip(absPaths, relPaths) as [string, string][];
-    const defRefs = await Promise.all(
-      absRelPaths.map(async path => await createDefRefs(tagGetter, path))
-    );
-    const defines = new Map<string, Set<string>>();
-    defRefs.forEach(([relPath, defs, _]) => {
-      (defs as Tag[]).forEach(def => {
-        _add(defines, def.text, relPath);
-      });
-    });
-    const definitions = new Map<string, Set<any>>();
-    defRefs.forEach(([relPath, defs, _]) => {
-      (defs as Tag[]).forEach(tag => {
-        _add(definitions, `${relPath},${tag.text}`, tag);
-      });
-    });
-    const references = new Map<string, string[]>();
-    defRefs.forEach(([relPath, _, refs]) => {
-      (refs as Tag[]).forEach(tag => {
-        _push(references, tag.text, relPath);
-      });
-    });
-    if (references.size === 0) {
-      defines.forEach((value, key) => {
-        references.set(key, Array.from(value));
-      });
-    }
-    const identifiers = Array.from(defines.keys()).filter(key => references.has(key));
-    return new TagRanker(
-      tagGetter.workspacePath,
-      relPaths,
-      defines,
-      definitions,
-      references,
-      identifiers
-    );
-  }
-
   constructor(
     readonly workspacePath: string,
     readonly relPaths: string[],

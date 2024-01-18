@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as langmaps from './langmaps';
 import Parser from 'web-tree-sitter';
 

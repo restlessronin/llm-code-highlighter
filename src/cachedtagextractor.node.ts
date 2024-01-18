@@ -1,25 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Tag, ITagExtractor } from './tagextractor';
-import { getLinguistLanguage, getQueryFileName } from './langmaps';
-import { AST } from './tree-sitter';
-import { Tagger } from './tagger-ts';
-
-export async function createASTFromPath([absPath, relPath]: [string, string]) {
-  const language = getLinguistLanguage(absPath);
-  if (!language) return;
-  const code = fs.readFileSync(absPath, 'utf8');
-  return AST.createFromCode([absPath, relPath], language, code);
-}
-
-export async function createTagger(ast: AST) {
-  const qFnName = getQueryFileName(ast.treeSitter.language);
-  if (!qFnName) return;
-  const scmFname = path.join(__dirname, 'queries', qFnName);
-  if (!fs.existsSync(scmFname)) return;
-  const queryScm = fs.readFileSync(scmFname, 'utf8');
-  return Tagger.create(ast, queryScm);
-}
+import { CodeTagExtractor } from './codetagextractor';
+import { TagQuery } from './tagquery.node';
 
 function _getMtime(absPath: string): number | undefined {
   try {
@@ -32,18 +15,23 @@ function _getMtime(absPath: string): number | undefined {
 export class CachedFileTagExtractor implements ITagExtractor {
   static readonly CACHE_FILE_NAME: string = 'tags.cache.json';
 
-  static create(workspacePath: string) {
+  static create(workspacePath: string): CachedFileTagExtractor {
     const cacheFileName = path.join(workspacePath, CachedFileTagExtractor.CACHE_FILE_NAME);
     const cache = fs.existsSync(cacheFileName)
       ? JSON.parse(fs.readFileSync(cacheFileName, 'utf8'))
       : {};
-    return new CachedFileTagExtractor(workspacePath, cache);
+    const extractor = new CodeTagExtractor(workspacePath, new TagQuery());
+    return new CachedFileTagExtractor(extractor, cache);
   }
 
   constructor(
-    public readonly workspacePath: string,
+    readonly extractor: CodeTagExtractor,
     readonly cache: { [key: string]: { mtime: number; data: Tag[] } }
   ) {}
+
+  get workspacePath() {
+    return this.extractor.workspacePath;
+  }
 
   async getTags([absPath, relPath]: [string, string]): Promise<Tag[]> {
     const fileMtime = _getMtime(absPath);
@@ -52,13 +40,13 @@ export class CachedFileTagExtractor implements ITagExtractor {
     if (value && value.mtime === fileMtime) {
       return value.data;
     }
-    const ast = await createASTFromPath([absPath, relPath]);
-    if (!ast) return [];
-    const tagger = await createTagger(ast);
-    if (!tagger) return [];
-    const data = tagger.read();
-    this.cache[absPath] = { mtime: fileMtime, data: data };
-    return data;
+    const code = fs.readFileSync(absPath, 'utf8');
+    if (!code) return [];
+    return this.extractor.extractTags([absPath, relPath], code);
+  }
+
+  async extractTags(path: [string, string], code: string): Promise<Tag[]> {
+    return this.extractor.extractTags(path, code);
   }
 
   writeCache() {
