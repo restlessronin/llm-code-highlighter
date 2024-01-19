@@ -13,7 +13,7 @@ export class CodeTagExtractor implements ITagExtractor {
     if (!language) return [];
     const ast = await AST.createFromCode([absPath, relPath], language, code);
     if (!ast) return [];
-    const tagger = Tagger.create(ast, this.tagQuery.getQuery(ast.treeSitter.language));
+    const tagger = Tagger.create(ast, this.tagQuery.getQuery(language));
     if (!tagger) return [];
     const data = tagger.read();
     return data;

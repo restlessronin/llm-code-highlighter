@@ -30,7 +30,7 @@ describe('TagRanker', () => {
   describe('rank', () => {
     it('should return ranked definitions', () => {
       const rankedTagRanker = tagRanker.rank();
-      expect(rankedTagRanker.rankedDefinitions).toEqual(expect.any(Map));
+      expect(rankedTagRanker.rankedDefinitions).toEqual(expect.any(Array));
     });
   });
 });

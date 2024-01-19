@@ -18,6 +18,37 @@ class _Counter extends Map<string, number> {
   }
 }
 
+export class RankedTags {
+  constructor(
+    readonly definitions: Map<string, Set<Tag>>,
+    readonly rankedFiles: [string, number][],
+    readonly rankedDefinitions: [string, number][]
+  ) {}
+
+  without(chatRelPaths: string[]) {
+    const filteredFiles = this.rankedFiles.filter(
+      ([relPath, _]) => !chatRelPaths.includes(relPath)
+    );
+    const filteredDefinitions = this.rankedDefinitions.filter(([key, _]) => {
+      const [relPath, _ident] = key.split(',');
+      return !chatRelPaths.includes(relPath);
+    });
+  }
+
+  toTags() {
+    return this.rankedDefinitions.reduce((acc: Tag[], [key, _rank]: [string, number]) => {
+      return [...acc, ...Array.from(this.definitions.get(key) as Set<Tag>)];
+    }, []);
+  }
+
+  toRankedFiles(files: string[]) {
+    const missingFiles = files.filter(
+      file => !this.rankedFiles.some(([relPath, _]) => relPath === file)
+    );
+    return [...this.rankedFiles.map(([relPath, _rank]) => relPath), ...missingFiles];
+  }
+}
+
 export class TagRanker {
   constructor(
     readonly workspacePath: string,
@@ -25,9 +56,7 @@ export class TagRanker {
     readonly defines: Map<string, Set<string>>,
     readonly definitions: Map<string, Set<Tag>>,
     readonly references: Map<string, string[]>,
-    readonly identifiers: string[],
-    readonly ranked: Record<string, number> = {},
-    readonly rankedDefinitions: Map<string, number> = new Map<string, number>()
+    readonly identifiers: string[]
   ) {}
 
   rank() {
@@ -42,7 +71,7 @@ export class TagRanker {
       });
     });
     pagerank.assign(G);
-    const rankedDefinitions = new Map<string, number>();
+    const rankedDefinitionsMap = new Map<string, number>();
     G.nodes().forEach(referencer => {
       const refRank = G.getNodeAttribute(referencer, 'pagerank');
       const totalWeight = G.edges(referencer).reduce(
@@ -54,59 +83,18 @@ export class TagRanker {
         const data = G.getEdgeAttributes(edge);
         const defRank = ((refRank as number) * data['weight']) / totalWeight;
         const key = `${definer},${data['ident']}`;
-        if (!rankedDefinitions.has(key)) rankedDefinitions.set(key, 0);
-        rankedDefinitions.set(key, (rankedDefinitions.get(key) as number) + defRank);
+        if (!rankedDefinitionsMap.has(key)) rankedDefinitionsMap.set(key, 0);
+        rankedDefinitionsMap.set(key, (rankedDefinitionsMap.get(key) as number) + defRank);
       });
     });
-    const ranked = G.nodes().reduce((accumulator: Record<string, number>, node: string) => {
+    const rankedFilesMap = G.nodes().reduce((accumulator: Record<string, number>, node: string) => {
       accumulator[node] = G.getNodeAttribute(node, 'pagerank') as number;
       return accumulator;
     }, {});
-    return new TagRanker(
-      this.workspacePath,
-      this.relPaths,
-      this.defines,
-      this.definitions,
-      this.references,
-      this.identifiers,
-      ranked,
-      rankedDefinitions
-    );
-  }
-
-  getDefinitionsIn(chatRelPaths: string[], restRelPaths: string[]) {
-    assert(
-      chatRelPaths.every(relPath => this.relPaths.includes(relPath)),
-      'chatRelPaths must be a subset of relPaths'
-    );
-    assert(
-      restRelPaths.every(relPath => this.relPaths.includes(relPath)),
-      'restRelPaths must be a subset of relPaths'
-    );
-
-    const rankedDefinitionsArr = Array.from(this.rankedDefinitions.entries()).sort(
+    const rankedDefinitions = Array.from(rankedDefinitionsMap.entries()).sort(
       (a, b) => b[1] - a[1]
     );
-    const rankedTags: Tag[] = rankedDefinitionsArr
-      .filter(([key, _rank]: [string, number]) => {
-        const [relPath, _ident] = key.split(',');
-        return !chatRelPaths.includes(relPath as string);
-      })
-      .reduce((acc: Tag[], [key, _rank]: [string, number]) => {
-        return [...acc, ...Array.from(this.definitions.get(key) as Set<Tag>)];
-      }, []);
-    const incRelPaths = rankedTags.map(rt => rt.relPath);
-    const ovlpRelPaths = Object.entries(this.ranked)
-      .filter(([relPath, _]) => restRelPaths.includes(relPath))
-      .map(([relPath, _]) => relPath);
-    const remnRelPaths = restRelPaths.filter(relPath => !ovlpRelPaths.includes(relPath));
-    const allRankedRelPaths = [
-      ...Object.entries(this.ranked).filter(([relPath, _]) => !incRelPaths.includes(relPath)),
-      ...Object.entries(this.ranked).filter(([relPath, _]) => remnRelPaths.includes(relPath)),
-    ];
-    const allRelPaths = allRankedRelPaths
-      .sort((a, b) => b[1] - a[1])
-      .map(([relPath, _]) => relPath);
-    return { rankedTags: rankedTags, relPaths: allRelPaths };
+    const rankedFiles = Object.entries(rankedFilesMap).sort((a, b) => b[1] - a[1]);
+    return new RankedTags(this.definitions, rankedFiles, rankedDefinitions);
   }
 }
