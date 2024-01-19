@@ -3,21 +3,17 @@ import { CachedFileTagExtractor } from '../cachedtagextractor.node';
 import { TagRanker } from '../tagranker';
 import { createDefRefsFromFiles } from '../defref.node';
 
+import { allSources } from './codefixture';
+import { CodeTagExtractor } from '../codetagextractor';
+import { TagQuery } from '../tagquery.node';
+import { createDefRefs } from '../defref';
+
 describe('TagRanker', () => {
-  let tagCacher: CachedFileTagExtractor;
   let tagRanker: TagRanker;
-  let workspacePath: string;
-  let absPaths: string[];
 
   beforeEach(async () => {
-    workspacePath = path.resolve(__dirname, '../../_testworkspace_'); // Create a subdirectory named 'testWorkspace'
-    absPaths = [
-      path.resolve(workspacePath, 'test_file_with_identifiers.py'),
-      path.resolve(workspacePath, 'test_file_import.py'),
-      path.resolve(workspacePath, 'test_file_pass.py'),
-    ];
-    tagCacher = CachedFileTagExtractor.create(workspacePath);
-    const defRefs = await createDefRefsFromFiles(tagCacher, absPaths);
+    const extractor = new CodeTagExtractor('', new TagQuery());
+    const defRefs = await createDefRefs(extractor, allSources);
     tagRanker = defRefs.createTagranker();
   });
 
