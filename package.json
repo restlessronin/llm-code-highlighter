@@ -2,7 +2,8 @@
   "name": "gauthier-repomap",
   "version": "0.0.1",
   "description": "Enhance codebase understanding with gauthier-repomap: a tree-sitter based tool for creating detailed repomaps from source code, aiding in AI-assisted coding.",
-  "main": "dist/index.js",
+  "main": "dist/index.node.js",
+  "browser": "dist/index.browser.js",
   "scripts": {
     "test": "jest",
     "build": "tsc"
@@ -24,12 +25,10 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "glob": "^10.3.10",
     "graphology": "^0.25.4",
     "graphology-metrics": "^2.2.0",
     "linguist-languages": "^7.27.0",
     "lodash": "^4.17.21",
-    "path": "^0.12.7",
     "tree-sitter-wasms": "^0.1.6",
     "web-tree-sitter": "^0.20.8"
   }
