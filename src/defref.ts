@@ -13,21 +13,16 @@ function _push<K, V>(map: Map<K, V[]>, key: K, value: V): void {
   map.get(key)?.push(value);
 }
 
+export type Source = { path: [string, string]; code: string };
 export type DefRef = { path: [string, string]; all: Tag[]; defs: Tag[]; refs: Tag[] };
 
-export async function createDefRefs(
-  tagGetter: ITagExtractor,
-  absPaths: string[],
-  relPaths: string[],
-  codes: string[]
-) {
-  const absRelPathCodes = _.zip(absPaths, relPaths, codes) as [string, string, string][];
+export async function createDefRefs(tagGetter: ITagExtractor, sources: Source[]) {
   const defRefs = await Promise.all(
-    absRelPathCodes.map(async ([absPath, relPath, code]) => {
-      const tags = await tagGetter.extractTags([absPath, relPath], code);
+    sources.map(async source => {
+      const tags = await tagGetter.extractTags(source.path, source.code);
       const defs = tags.filter(tag => tag.kind === 'def');
       const refs = tags.filter(tag => tag.kind === 'ref');
-      return { path: [absPath, relPath], all: tags, defs: defs, refs: refs } as DefRef;
+      return { path: source.path, all: tags, defs: defs, refs: refs } as DefRef;
     })
   );
   return new DefRefs(tagGetter.workspacePath, defRefs);
