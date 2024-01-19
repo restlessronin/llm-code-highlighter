@@ -6,8 +6,8 @@ import { Tagger } from './tagger-ts';
 export class CodeTagExtractor implements ITagExtractor {
   constructor(public readonly workspacePath: string, readonly tagQuery: ITagQuery) {}
 
-  async extractTags([absPath, relPath]: [string, string], code: string): Promise<Tag[]> {
-    const language = getLinguistLanguage(absPath);
+  async extractTags(relPath: string, code: string): Promise<Tag[]> {
+    const language = getLinguistLanguage(relPath);
     if (!language) return [];
     const ast = await AST.createFromCode(relPath, language, code);
     if (!ast) return [];

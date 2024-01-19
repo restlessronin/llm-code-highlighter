@@ -4,5 +4,5 @@ export { Tag };
 
 export interface ITagExtractor {
   workspacePath: string;
-  extractTags(path: [string, string], code: string): Promise<Tag[]>;
+  extractTags(relPath: string, code: string): Promise<Tag[]>;
 }

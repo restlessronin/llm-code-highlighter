@@ -33,7 +33,12 @@ export class CachedFileTagExtractor implements ITagExtractor {
     return this.extractor.workspacePath;
   }
 
-  async getTags([absPath, relPath]: [string, string]): Promise<Tag[]> {
+  getAbsPath(relPath: string): string {
+    return path.join(this.workspacePath, relPath);
+  }
+
+  async getTags(relPath: string): Promise<Tag[]> {
+    const absPath = this.getAbsPath(relPath);
     const fileMtime = _getMtime(absPath);
     if (!fileMtime) return [];
     const value = this.cache[absPath];
@@ -42,11 +47,11 @@ export class CachedFileTagExtractor implements ITagExtractor {
     }
     const code = fs.readFileSync(absPath, 'utf8');
     if (!code) return [];
-    return this.extractor.extractTags([absPath, relPath], code);
+    return this.extractor.extractTags(relPath, code);
   }
 
-  async extractTags(path: [string, string], code: string): Promise<Tag[]> {
-    return this.extractor.extractTags(path, code);
+  async extractTags(relPath: string, code: string): Promise<Tag[]> {
+    return this.extractor.extractTags(relPath, code);
   }
 
   writeCache() {

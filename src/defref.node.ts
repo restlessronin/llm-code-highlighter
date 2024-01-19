@@ -8,7 +8,7 @@ export async function createDefRefsFromFiles(tagGetter: ITagExtractor, absPaths:
   const sources = absPaths.map(
     absPath =>
       ({
-        path: [absPath, path.relative(tagGetter.workspacePath, absPath)],
+        relPath: path.relative(tagGetter.workspacePath, absPath),
         code: fs.readFileSync(absPath, 'utf8'),
       } as Source)
   );

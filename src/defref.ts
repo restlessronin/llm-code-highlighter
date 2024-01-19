@@ -13,16 +13,16 @@ function _push<K, V>(map: Map<K, V[]>, key: K, value: V): void {
   map.get(key)?.push(value);
 }
 
-export type Source = { path: [string, string]; code: string };
-export type DefRef = { path: [string, string]; all: Tag[]; defs: Tag[]; refs: Tag[] };
+export type Source = { relPath: string; code: string };
+export type DefRef = { relPath: string; all: Tag[]; defs: Tag[]; refs: Tag[] };
 
 export async function createDefRefs(tagGetter: ITagExtractor, sources: Source[]) {
   const defRefs = await Promise.all(
     sources.map(async source => {
-      const tags = await tagGetter.extractTags(source.path, source.code);
+      const tags = await tagGetter.extractTags(source.relPath, source.code);
       const defs = tags.filter(tag => tag.kind === 'def');
       const refs = tags.filter(tag => tag.kind === 'ref');
-      return { path: source.path, all: tags, defs: defs, refs: refs } as DefRef;
+      return { relPath: source.relPath, all: tags, defs: defs, refs: refs } as DefRef;
     })
   );
   return new DefRefs(tagGetter.workspacePath, defRefs);
@@ -34,23 +34,20 @@ export class DefRefs {
   createTagranker() {
     const defines = new Map<string, Set<string>>();
     this.defRefs.forEach(defRef => {
-      const [_, relPath] = defRef.path;
       (defRef.defs as Tag[]).forEach(def => {
-        _add(defines, def.text, relPath);
+        _add(defines, def.text, defRef.relPath);
       });
     });
     const definitions = new Map<string, Set<Tag>>();
     this.defRefs.forEach(defRef => {
-      const [_, relPath] = defRef.path;
       (defRef.defs as Tag[]).forEach(tag => {
-        _add(definitions, `${relPath},${tag.text}`, tag);
+        _add(definitions, `${defRef.relPath},${tag.text}`, tag);
       });
     });
     const references = new Map<string, string[]>();
     this.defRefs.forEach(defRef => {
-      const [_, relPath] = defRef.path;
       (defRef.refs as Tag[]).forEach(tag => {
-        _push(references, tag.text, relPath);
+        _push(references, tag.text, defRef.relPath);
       });
     });
     if (references.size === 0) {
@@ -59,8 +56,7 @@ export class DefRefs {
       });
     }
     const relPaths = this.defRefs.map(defRef => {
-      const [_, relPath] = defRef.path;
-      return relPath;
+      return defRef.relPath;
     });
     const identifiers = Array.from(defines.keys()).filter(key => references.has(key));
     return new TagRanker(
