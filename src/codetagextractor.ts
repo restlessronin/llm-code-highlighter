@@ -3,8 +3,6 @@ import { getLinguistLanguage, getQueryFileName } from './langmaps';
 import { AST } from './tree-sitter';
 import { Tagger } from './tagger-ts';
 
-export async function createAST([absPath, relPath]: [string, string], code: string) {}
-
 export class CodeTagExtractor implements ITagExtractor {
   constructor(public readonly workspacePath: string, readonly tagQuery: ITagQuery) {}
 

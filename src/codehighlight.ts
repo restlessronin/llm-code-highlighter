@@ -8,7 +8,7 @@ class MapOptions {
   constructor(readonly headerMax: number) {}
 }
 
-class CodeMapper {
+class CodeHighlighter {
   constructor(
     readonly codeLines: string[],
     readonly linesOfInterest: LineOfInterest[],
@@ -16,7 +16,7 @@ class CodeMapper {
     readonly scopes: Scope[]
   ) {}
 
-  withSmallGapsClosed(): CodeMapper {
+  withSmallGapsClosed(): CodeHighlighter {
     const closedShow = new Set<number>();
     const sortedShow = Array.from(this.showLines).sort((a, b) => a - b);
     for (let i = 0; i < sortedShow.length - 1; i++) {
@@ -28,7 +28,7 @@ class CodeMapper {
     if (sortedShow.length > 0) {
       closedShow.add(sortedShow[sortedShow.length - 1]);
     }
-    return new CodeMapper(
+    return new CodeHighlighter(
       this.codeLines,
       this.linesOfInterest,
       Array.from(closedShow),
@@ -62,7 +62,7 @@ class FileScopes {
     readonly header: [number, number, number][]
   ) {}
 
-  buildCodeMapper(lineNumbers: number[]) {
+  buildCodeHighlighter(lineNumbers: number[]) {
     const linesOfInterest = new Set<number>(lineNumbers);
     if (linesOfInterest.size === 0) {
       return;
@@ -71,7 +71,7 @@ class FileScopes {
     this.linesFromParentScopes(linesOfInterest).forEach(lineNum => {
       showLines.add(lineNum);
     });
-    return new CodeMapper(
+    return new CodeHighlighter(
       this.codeLines,
       Array.from(linesOfInterest).sort(),
       Array.from(showLines).sort(),
@@ -148,7 +148,7 @@ class LineScopes {
 
 const mapOptions = new MapOptions(10);
 
-export async function createRepoMap(
+export async function getHighlightedCode(
   path: [string, string],
   language: string,
   code: string,
@@ -160,7 +160,7 @@ export async function createRepoMap(
   const lineScopes = LineScopes.create(codeLines.length).init(ast.tree.rootNode);
   const header = lineScopes.toDominantBlock(mapOptions);
   const fileScopes = new FileScopes(codeLines, lineScopes.scopes, header);
-  const codeMapper = fileScopes.buildCodeMapper(linesOfInterest);
-  if (!codeMapper) return;
-  return codeMapper.withSmallGapsClosed().format();
+  const codeHighlighter = fileScopes.buildCodeHighlighter(linesOfInterest);
+  if (!codeHighlighter) return;
+  return codeHighlighter.withSmallGapsClosed().format();
 }

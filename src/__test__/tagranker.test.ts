@@ -27,9 +27,9 @@ describe('TagRanker', () => {
     });
   });
 
-  describe('rank', () => {
+  describe('pagerank', () => {
     it('should return ranked definitions', () => {
-      const rankedTagRanker = tagRanker.rank();
+      const rankedTagRanker = tagRanker.pagerank();
       expect(rankedTagRanker.rankedDefinitions).toEqual(expect.any(Array));
     });
   });

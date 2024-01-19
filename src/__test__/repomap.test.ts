@@ -1,8 +1,8 @@
-import { createRepoMap } from '../repomap';
+import { getHighlightedCode } from '../codehighlight';
 
-describe('CodeMapper', () => {
+describe('CodeHighlighter', () => {
   it('should format python code correctly', async () => {
-    const repomap = await createRepoMap(
+    const repomap = await getHighlightedCode(
       ['test.js', 'test.js'],
       'Python',
       `class MyClass:

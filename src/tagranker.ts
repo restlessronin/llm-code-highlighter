@@ -1,4 +1,3 @@
-import assert from 'assert';
 import _ from 'lodash';
 import { Tag } from './tagger-ts';
 
@@ -33,6 +32,7 @@ export class RankedTags {
       const [relPath, _ident] = key.split(',');
       return !chatRelPaths.includes(relPath);
     });
+    return new RankedTags(this.definitions, filteredFiles, filteredDefinitions);
   }
 
   toTags() {
@@ -59,7 +59,7 @@ export class TagRanker {
     readonly identifiers: string[]
   ) {}
 
-  rank() {
+  pagerank() {
     const G = new MultiGraph();
     this.identifiers.forEach(ident => {
       const definers = this.defines.get(ident);
