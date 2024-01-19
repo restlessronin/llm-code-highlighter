@@ -26,17 +26,16 @@ class TreeSitter {
 export { Parser };
 
 export class AST {
-  static async createFromCode([absPath, relPath]: [string, string], lang: string, code: string) {
+  static async createFromCode(relPath: string, lang: string, code: string) {
     const treeSitter = (await TreeSitter.create(lang))!;
     const tree = treeSitter.parse(code);
-    return new AST(treeSitter, tree, absPath, relPath);
+    return new AST(treeSitter, tree, relPath);
   }
 
   constructor(
     readonly treeSitter: TreeSitter,
     public readonly tree: Parser.Tree,
-    readonly absPath: string,
-    readonly relPath: string
+    public readonly relPath: string
   ) {}
 
   captures(queryScm: string): Parser.QueryCapture[] {

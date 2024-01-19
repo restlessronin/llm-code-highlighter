@@ -12,7 +12,6 @@ function _getKind(tag: string) {
 
 export type Tag = {
   relPath: string;
-  absPath: string;
   text: string;
   kind: string;
   start: {
@@ -40,7 +39,6 @@ export class Tagger {
         return kind
           ? ({
               relPath: this.ast.relPath,
-              absPath: this.ast.absPath,
               text: node.text,
               kind: kind,
               start: {

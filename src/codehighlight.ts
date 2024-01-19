@@ -37,18 +37,17 @@ class CodeHighlighter {
   }
 
   format(): string {
-    const lineNumWidth = this.codeLines.length.toString().length;
     return this.codeLines.reduce((acc, line, i) => {
-      return acc + this.formatLine(line, i, lineNumWidth);
+      return acc + this.formatLine(line, i);
     }, '');
   }
 
-  private formatLine(lineContent: string, i: number, lineNumWidth: number) {
+  private formatLine(lineContent: string, i: number) {
     const isLineOfInterest = this.linesOfInterest.includes(i);
     const shouldShowLine = this.showLines.includes(i);
     if (shouldShowLine) {
       const linePrefix = isLineOfInterest ? '█' : '│';
-      return `${linePrefix}${(i + 1).toString().padStart(lineNumWidth)}: ${lineContent}\n`;
+      return `${linePrefix}${lineContent}\n`;
     } else {
       return i === 0 || this.showLines.includes(i - 1) ? '⋮...\n' : '';
     }
@@ -149,13 +148,13 @@ class LineScopes {
 const mapOptions = new MapOptions(10);
 
 export async function getHighlightedCode(
-  path: [string, string],
+  relPath: string,
   language: string,
   code: string,
   linesOfInterest: number[]
 ) {
   const codeLines = code.split('\n');
-  const ast = await AST.createFromCode(path, language, code);
+  const ast = await AST.createFromCode(relPath, language, code);
   if (!ast) return;
   const lineScopes = LineScopes.create(codeLines.length).init(ast.tree.rootNode);
   const header = lineScopes.toDominantBlock(mapOptions);

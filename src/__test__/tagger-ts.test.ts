@@ -95,34 +95,29 @@ describe('Tagger', () => {
   `;
   describe('read for JavaScript file contents', () => {
     it('should return an empty array when there are no captures', async () => {
-      const ast = await AST.createFromCode(['test.js', 'test.js'], 'JavaScript', 'let x = 1;');
+      const ast = await AST.createFromCode('test.js', 'JavaScript', 'let x = 1;');
       const tagger = Tagger.create(ast, jsQueryScm);
       const result = tagger?.read();
       expect(result).toEqual([]);
     });
 
     it('should return a single reference', async () => {
-      const ast = await AST.createFromCode(
-        ['test.js', 'test.js'],
-        'JavaScript',
-        `let x = 1;
-        console.log(x);`
-      );
+      const ast = await AST.createFromCode('test.js', 'JavaScript', `let x = 1;
+      console.log(x);`);
       const tagger = Tagger.create(ast, jsQueryScm);
       const result = tagger?.read();
       expect(result).toEqual([
         {
           relPath: 'test.js',
-          absPath: 'test.js',
           text: 'log',
           kind: 'ref',
           start: {
             ln: 1,
-            col: 16,
+            col: 14,
           },
           end: {
             ln: 1,
-            col: 19,
+            col: 17,
           },
         },
       ]);

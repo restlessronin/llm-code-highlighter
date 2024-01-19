@@ -9,7 +9,7 @@ export class CodeTagExtractor implements ITagExtractor {
   async extractTags([absPath, relPath]: [string, string], code: string): Promise<Tag[]> {
     const language = getLinguistLanguage(absPath);
     if (!language) return [];
-    const ast = await AST.createFromCode([absPath, relPath], language, code);
+    const ast = await AST.createFromCode(relPath, language, code);
     if (!ast) return [];
     const tagger = Tagger.create(ast, this.tagQuery.getQuery(language));
     if (!tagger) return [];
