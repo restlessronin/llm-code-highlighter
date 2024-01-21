@@ -1,5 +1,5 @@
 {
-  "name": "gauthier-repomap",
+  "name": "llm-code-highlighter",
   "dockerFile": "Dockerfile",
   "forwardPorts": [3000],
   "customizations": {

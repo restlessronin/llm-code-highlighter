@@ -9,12 +9,12 @@ This typescript version of the original python code was created with assistance 
 This package is distributed via npm:
 
 ```bash
-npm install gauthier-repomap
+npm install llm-code-highlighter
 ```
 
 ## Usage
 ```typescript
-import { fileHighlights } from 'gauthier-repomap';
+import { fileHighlights } from 'llm-code-highlighter';
 ```
 
 ## Contributing
