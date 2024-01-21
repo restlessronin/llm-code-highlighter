@@ -1,6 +1,7 @@
-import { Tag } from './common';
+import { AST } from './AST';
 import { getLinguistLanguage } from './lang-utils';
+import { Tag, IContentPath } from './common';
 import { CodeTagExtractor } from './CodeTagExtractor';
 import { DefRefs } from './DefRefs';
 
-export { Tag, getLinguistLanguage, CodeTagExtractor, DefRefs };
+export { AST, Tag, IContentPath, getLinguistLanguage, CodeTagExtractor, DefRefs };
