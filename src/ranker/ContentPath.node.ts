@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { getQueryFileName } from './lang-utils';
+import { getQueryFileName, getWasmPath } from './lang-utils';
 import { IContentPath } from './common';
 
 export class NodeContentPath implements IContentPath {
@@ -7,7 +7,8 @@ export class NodeContentPath implements IContentPath {
     const queryFileName = `${__dirname}/../tag-qry/${getQueryFileName(language)!}`;
     return fs.readFileSync(queryFileName, 'utf8');
   }
+
   getWasmURL(language: string): string {
-    throw new Error('Method not implemented.');
+    return require.resolve(`tree-sitter-wasms/out/${getWasmPath(language)}`);
   }
 }

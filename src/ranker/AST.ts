@@ -1,8 +1,8 @@
 import { TreeSitter, Parser } from './TreeSitter';
 
 export class AST {
-  static async createFromCode(relPath: string, lang: string, code: string) {
-    const treeSitter = (await TreeSitter.create(lang))!;
+  static async createFromCode(relPath: string, code: string, wasmPath: string, language: string) {
+    const treeSitter = await TreeSitter.create(wasmPath, language);
     const tree = treeSitter.parse(code);
     return new AST(treeSitter, tree, relPath);
   }

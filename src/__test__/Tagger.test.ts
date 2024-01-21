@@ -1,4 +1,5 @@
 import { AST } from '../ranker/AST';
+import { NodeContentPath } from '../ranker/ContentPath.node';
 import { Tagger } from '../ranker/Tagger';
 
 describe('Tagger', () => {
@@ -95,18 +96,28 @@ describe('Tagger', () => {
   `;
   describe('read for JavaScript file contents', () => {
     it('should return an empty array when there are no captures', async () => {
-      const ast = await AST.createFromCode('test.js', 'JavaScript', 'let x = 1;');
+      const contentPath = new NodeContentPath();
+      const language = 'JavaScript';
+      const ast = await AST.createFromCode(
+        'test.js',
+        'let x = 1;',
+        contentPath.getWasmURL(language),
+        language
+      );
       const tagger = Tagger.create(ast, jsQueryScm);
       const result = tagger?.read();
       expect(result).toEqual([]);
     });
 
     it('should return a single reference', async () => {
+      const contentPath = new NodeContentPath();
+      const language = 'JavaScript';
       const ast = await AST.createFromCode(
         'test.js',
-        'JavaScript',
         `let x = 1;
-      console.log(x);`
+      console.log(x);`,
+        contentPath.getWasmURL(language),
+        language
       );
       const tagger = Tagger.create(ast, jsQueryScm);
       const result = tagger?.read();
