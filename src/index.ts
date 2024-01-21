@@ -1,6 +1,6 @@
 import assert from 'assert';
 import _ from 'lodash';
-import { Tag, DefRefs, CodeTagExtractor, getLinguistLanguage, IContentPath } from './ranker/';
+import { Tag, DefRefs, CodeTagExtractor, IContentPath } from './ranker/';
 import { generateFileHighlights } from './highlighter/';
 
 async function createRankedTags(
@@ -12,14 +12,17 @@ async function createRankedTags(
   return defRefs.createTagranker().pagerank();
 }
 
-async function generateFileHighlights(tags: Tag[], code: string, contentPath: IContentPath) {
+async function generateFileHighlightsFromTags(
+  tags: Tag[],
+  code: string,
+  contentPath: IContentPath
+) {
   const relPath = tags[0].relPath;
-  const language = getLinguistLanguage(relPath)!;
-  const loi = tags.map(tag => tag.start.ln - 1);
-  return `\n${relPath}\n${generateFileHighlights(relPath, code, loi, contentPath)}`;
+  const linesOfInterest = tags.map(tag => tag.start.ln - 1);
+  return generateFileHighlights(relPath, code, linesOfInterest, contentPath);
 }
 
-export async function generateHighlights(
+export async function generateRepoHighlights(
   topPercentile: number,
   chatSources: { relPath: string; code: string }[],
   otherSources: { relPath: string; code: string }[],
@@ -34,9 +37,10 @@ export async function generateHighlights(
   const mapTags = topTags.slice(0, maxTags);
   const sortedTags = _.orderBy(mapTags, ['relPath', 'start.ln'], ['asc', 'asc']);
   const groupedTags = _.groupBy(sortedTags, tag => tag.relPath);
-  const fileHighlights = Object.values(groupedTags).map(tags => {
-    const code = allSources.find(source => source.relPath === tags[0].relPath)!.code;
-    return generateFileHighlights(tags, code, contentPath);
+  const fileHighlights = _.values(groupedTags).map(tags => {
+    const relPath = tags[0].relPath;
+    const code = allSources.find(source => source.relPath === relPath)!.code;
+    return generateFileHighlightsFromTags(tags, code, contentPath);
   });
   return _.join(fileHighlights, '');
 }

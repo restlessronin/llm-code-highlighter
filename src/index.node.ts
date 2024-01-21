@@ -1,10 +1,10 @@
-import { generateHighlights } from '.';
+import { generateRepoHighlights } from '.';
 import { NodeContentPath } from './ranker/ContentPath.node';
 
-export async function generateRepoHighlights(
+export async function getRepoHighlights(
   topPercentile: number,
   chatSources: { relPath: string; code: string }[],
   otherSources: { relPath: string; code: string }[]
 ) {
-  generateHighlights(topPercentile, chatSources, otherSources, new NodeContentPath());
+  generateRepoHighlights(topPercentile, chatSources, otherSources, new NodeContentPath());
 }

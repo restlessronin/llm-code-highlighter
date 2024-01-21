@@ -1,5 +1,5 @@
-import { getLinguistLanguage, IContentPath, AST } from '../ranker';
-import { HighlightConfiguration } from './common';
+import { Tag, getLinguistLanguage, IContentPath, AST } from '../ranker';
+import { HighlightConfiguration, LineOfInterest } from './common';
 import { CodeLineScopeTracker } from './CodeLineScopeTracker';
 import { ScopeLineIntegrator } from './ScopeLineIntegrator';
 
@@ -8,11 +8,11 @@ const mapOptions = new HighlightConfiguration(10);
 export async function generateFileHighlights(
   relPath: string,
   code: string,
-  linesOfInterest: number[],
+  linesOfInterest: LineOfInterest[],
   contentPath: IContentPath
 ) {
+  const language = getLinguistLanguage(relPath)!;
   const codeLines = code.split('\n');
-  const language = getLinguistLanguage(relPath);
   if (!language) return;
   const wasmPath = contentPath.getWasmURL(language);
   const ast = await AST.createFromCode(relPath, code, wasmPath, language);
