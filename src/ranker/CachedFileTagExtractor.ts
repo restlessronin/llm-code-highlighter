@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Tag, ITagExtractor } from './common';
 import { CodeTagExtractor } from './CodeTagExtractor';
-import { NodeTagQuery } from './TagQuery.node';
+import { NodeContentPath } from './ContentPath.node';
 
 export class CachedFileTagExtractor implements ITagExtractor {
   static readonly CACHE_FILE_NAME: string = 'tags.cache.json';
@@ -12,7 +12,7 @@ export class CachedFileTagExtractor implements ITagExtractor {
     const cache = fs.existsSync(cacheFileName)
       ? JSON.parse(fs.readFileSync(cacheFileName, 'utf8'))
       : {};
-    const extractor = new CodeTagExtractor(workspacePath, new NodeTagQuery());
+    const extractor = new CodeTagExtractor(workspacePath, new NodeContentPath());
     return new CachedFileTagExtractor(extractor, cache);
   }
 

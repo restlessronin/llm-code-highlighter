@@ -1,10 +1,10 @@
-import { Tag, ITagExtractor, ITagQuery } from './common';
+import { Tag, ITagExtractor, IContentPath } from './common';
 import { getLinguistLanguage } from './lang-utils';
 import { AST } from './AST';
 import { Tagger } from './Tagger';
 
 export class CodeTagExtractor implements ITagExtractor {
-  constructor(public readonly workspacePath: string, readonly tagQuery: ITagQuery) {}
+  constructor(public readonly workspacePath: string, readonly tagQuery: IContentPath) {}
 
   async extractTags(relPath: string, code: string): Promise<Tag[]> {
     const language = getLinguistLanguage(relPath);

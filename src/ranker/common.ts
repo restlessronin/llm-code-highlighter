@@ -17,6 +17,7 @@ export interface ITagExtractor {
   extractTags(relPath: string, code: string): Promise<Tag[]>;
 }
 
-export interface ITagQuery {
+export interface IContentPath {
   getQuery(language: string): string;
+  getWasmURL(language: string): string;
 }
