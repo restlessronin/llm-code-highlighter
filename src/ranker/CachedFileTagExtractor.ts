@@ -16,7 +16,7 @@ export class CachedFileTagExtractor implements ITagExtractor {
     return new CachedFileTagExtractor(extractor, cache);
   }
 
-  static _getMtime(absPath: string): number | undefined {
+  private static getMtime(absPath: string): number | undefined {
     try {
       return fs.statSync(absPath).mtimeMs;
     } catch (e) {
@@ -39,7 +39,7 @@ export class CachedFileTagExtractor implements ITagExtractor {
 
   async getTags(relPath: string): Promise<Tag[]> {
     const absPath = this.getAbsPath(relPath);
-    const fileMtime = CachedFileTagExtractor._getMtime(absPath);
+    const fileMtime = CachedFileTagExtractor.getMtime(absPath);
     if (!fileMtime) return [];
     const value = this.cache[absPath];
     if (value && value.mtime === fileMtime) {
