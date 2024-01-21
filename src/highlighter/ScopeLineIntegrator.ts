@@ -31,7 +31,7 @@ export class ScopeLineIntegrator {
       Array.from(linesOfInterest).reduce((acc, scopeStart) => {
         const header = this.header[scopeStart];
         if (header.length > 0) {
-          const [_uu, start, end] = header;
+          const [_size, start, end] = header;
           return _.range(start, end).reduce((accI, i) => {
             return accI.add(i);
           }, acc);
