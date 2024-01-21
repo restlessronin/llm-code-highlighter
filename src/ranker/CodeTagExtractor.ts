@@ -1,7 +1,7 @@
-import { Tag, ITagExtractor } from './tagextractor';
-import { getLinguistLanguage, getQueryFileName } from './langmaps';
-import { AST } from './tree-sitter';
-import { Tagger } from './tagger-ts';
+import { Tag, ITagExtractor, ITagQuery } from './common';
+import { getLinguistLanguage } from './lang-utils';
+import { AST } from './AST';
+import { Tagger } from './Tagger';
 
 export class CodeTagExtractor implements ITagExtractor {
   constructor(public readonly workspacePath: string, readonly tagQuery: ITagQuery) {}

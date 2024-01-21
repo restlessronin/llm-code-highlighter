@@ -1,19 +1,17 @@
 import * as path from 'path';
-import { CachedFileTagExtractor } from '../cachedtagextractor.node';
-import { TagRanker } from '../tagranker';
-import { createDefRefsFromFiles } from '../defref.node';
+import { TagRanker } from '../ranker/tagranker';
 
 import { allSources } from './codefixture';
-import { CodeTagExtractor } from '../codetagextractor';
-import { TagQuery } from '../tagquery.node';
-import { createDefRefs } from '../defref';
+import { CodeTagExtractor } from '../ranker/CodeTagExtractor';
+import { TagQuery } from '../ranker/TagQuery.node';
+import { DefRefs } from '../ranker/DefRefs';
 
 describe('TagRanker', () => {
   let tagRanker: TagRanker;
 
   beforeEach(async () => {
     const extractor = new CodeTagExtractor('', new TagQuery());
-    const defRefs = await createDefRefs(extractor, allSources);
+    const defRefs = await DefRefs.create(extractor, allSources);
     tagRanker = defRefs.createTagranker();
   });
 

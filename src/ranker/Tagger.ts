@@ -1,32 +1,19 @@
-import { AST } from './tree-sitter';
-
-function _getKind(tag: string) {
-  if (tag.startsWith('name.definition.')) {
-    return 'def';
-  } else if (tag.startsWith('name.reference.')) {
-    return 'ref';
-  } else {
-    return;
-  }
-}
-
-export type Tag = {
-  relPath: string;
-  text: string;
-  kind: string;
-  start: {
-    ln: number;
-    col: number;
-  };
-  end: {
-    ln: number;
-    col: number;
-  };
-};
+import { AST } from './AST';
+import { Tag } from './common';
 
 export class Tagger {
   static create(ast: AST, queryScm: string) {
     return new Tagger(ast, queryScm);
+  }
+
+  static _getKind(tag: string) {
+    if (tag.startsWith('name.definition.')) {
+      return 'def';
+    } else if (tag.startsWith('name.reference.')) {
+      return 'ref';
+    } else {
+      return;
+    }
   }
 
   constructor(readonly ast: AST, readonly queryScm: string) {}
@@ -35,7 +22,7 @@ export class Tagger {
     return this.ast
       .captures(this.queryScm)
       .map(({ node, name }: { node: any; name: string }) => {
-        const kind = _getKind(name);
+        const kind = Tagger._getKind(name);
         return kind
           ? ({
               relPath: this.ast.relPath,

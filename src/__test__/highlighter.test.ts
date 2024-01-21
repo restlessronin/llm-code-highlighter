@@ -1,8 +1,8 @@
-import { getHighlightedCode } from '../codehighlight';
+import { generateHighlightedSourceCode } from '../highlighter';
 
 describe('CodeHighlighter', () => {
   it('should format python code correctly', async () => {
-    const repomap = await getHighlightedCode(
+    const repomap = await generateHighlightedSourceCode(
       'test.js',
       'Python',
       `class MyClass:

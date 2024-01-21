@@ -1,22 +1,19 @@
 import assert from 'assert';
 import _ from 'lodash';
-import { TagQuery } from './tagquery.node';
-import { Tag } from './tagger-ts';
-import { getLinguistLanguage } from './langmaps';
-import { CodeTagExtractor } from './codetagextractor';
-import { createDefRefs } from './defref';
-import { getHighlightedCode } from './codehighlight';
+import { Tag, DefRefs, CodeTagExtractor, getLinguistLanguage } from './ranker/';
+import { TagQuery } from './ranker/TagQuery.node';
+import { generateHighlightedSourceCode } from './highlighter/';
 
 async function createRankedTags(sources: { relPath: string; code: string }[]) {
   const extractor = new CodeTagExtractor('', new TagQuery());
-  const defRefs = await createDefRefs(extractor, sources);
+  const defRefs = await DefRefs.create(extractor, sources);
   return defRefs.createTagranker().pagerank();
 }
 
 async function createFileHighlights(tags: Tag[], code: string) {
   const relPath = tags[0].relPath;
   const language = getLinguistLanguage(relPath)!;
-  return `\n${relPath}\n${getHighlightedCode(
+  return `\n${relPath}\n${generateHighlightedSourceCode(
     relPath,
     language,
     code,

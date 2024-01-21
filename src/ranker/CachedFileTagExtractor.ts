@@ -1,16 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Tag, ITagExtractor } from './tagextractor';
-import { CodeTagExtractor } from './codetagextractor';
-import { TagQuery } from './tagquery.node';
-
-function _getMtime(absPath: string): number | undefined {
-  try {
-    return fs.statSync(absPath).mtimeMs;
-  } catch (e) {
-    return;
-  }
-}
+import { Tag, ITagExtractor } from './common';
+import { CodeTagExtractor } from './CodeTagExtractor';
+import { TagQuery } from './TagQuery.node';
 
 export class CachedFileTagExtractor implements ITagExtractor {
   static readonly CACHE_FILE_NAME: string = 'tags.cache.json';
@@ -22,6 +14,14 @@ export class CachedFileTagExtractor implements ITagExtractor {
       : {};
     const extractor = new CodeTagExtractor(workspacePath, new TagQuery());
     return new CachedFileTagExtractor(extractor, cache);
+  }
+
+  static _getMtime(absPath: string): number | undefined {
+    try {
+      return fs.statSync(absPath).mtimeMs;
+    } catch (e) {
+      return;
+    }
   }
 
   constructor(
@@ -39,7 +39,7 @@ export class CachedFileTagExtractor implements ITagExtractor {
 
   async getTags(relPath: string): Promise<Tag[]> {
     const absPath = this.getAbsPath(relPath);
-    const fileMtime = _getMtime(absPath);
+    const fileMtime = CachedFileTagExtractor._getMtime(absPath);
     if (!fileMtime) return [];
     const value = this.cache[absPath];
     if (value && value.mtime === fileMtime) {

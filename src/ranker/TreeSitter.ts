@@ -1,9 +1,9 @@
-import * as langmaps from './langmaps';
+import * as langmaps from './lang-utils';
 import Parser from 'web-tree-sitter';
 
 const parserInitPromise = Parser.init();
 
-class TreeSitter {
+export class TreeSitter {
   static async create(language: string) {
     const moduleName = langmaps.getWasmPath(language);
     if (!moduleName) return;
@@ -24,22 +24,3 @@ class TreeSitter {
 }
 
 export { Parser };
-
-export class AST {
-  static async createFromCode(relPath: string, lang: string, code: string) {
-    const treeSitter = (await TreeSitter.create(lang))!;
-    const tree = treeSitter.parse(code);
-    return new AST(treeSitter, tree, relPath);
-  }
-
-  constructor(
-    readonly treeSitter: TreeSitter,
-    public readonly tree: Parser.Tree,
-    public readonly relPath: string
-  ) {}
-
-  captures(queryScm: string): Parser.QueryCapture[] {
-    const query = this.treeSitter.parser.getLanguage().query(queryScm);
-    return query.captures(this.tree.rootNode);
-  }
-}

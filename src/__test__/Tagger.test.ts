@@ -1,5 +1,5 @@
-import { AST } from '../tree-sitter';
-import { Tagger } from '../tagger-ts';
+import { AST } from '../ranker/AST';
+import { Tagger } from '../ranker/Tagger';
 
 describe('Tagger', () => {
   const jsQueryScm = `
@@ -102,8 +102,12 @@ describe('Tagger', () => {
     });
 
     it('should return a single reference', async () => {
-      const ast = await AST.createFromCode('test.js', 'JavaScript', `let x = 1;
-      console.log(x);`);
+      const ast = await AST.createFromCode(
+        'test.js',
+        'JavaScript',
+        `let x = 1;
+      console.log(x);`
+      );
       const tagger = Tagger.create(ast, jsQueryScm);
       const result = tagger?.read();
       expect(result).toEqual([
