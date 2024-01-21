@@ -1,7 +1,7 @@
 {
   "name": "llm-code-highlighter",
   "version": "0.0.1",
-  "description": "Summarize code for LLM consumption. Extract just the highlights from source files, using Paul Gauthier's repomap technique fromt the Aider repository",
+  "description": "Condense source code for LLM analysis with Paul Gauthier's repomap technique from the Aider repository, focusing on extracting essential highlights.",
   "main": "dist/index.node.js",
   "browser": "dist/index.browser.js",
   "scripts": {
