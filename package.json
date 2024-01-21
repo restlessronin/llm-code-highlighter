@@ -1,7 +1,7 @@
 {
-  "name": "gauthier-repomap",
+  "name": "llm-code-highlighter",
   "version": "0.0.1",
-  "description": "Enhanced LLM code context with gauthier-repomap: a tree-sitter based tool for creating source code highlights",
+  "description": "Summarize code for LLM consumption. Extract just the highlights from source files, using Paul Gauthier's repomap technique fromt the Aider repository",
   "main": "dist/index.node.js",
   "browser": "dist/index.browser.js",
   "scripts": {
