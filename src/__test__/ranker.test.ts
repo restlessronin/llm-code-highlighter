@@ -3,14 +3,14 @@ import { TagRanker } from '../ranker/tagranker';
 
 import { allSources } from './codefixture';
 import { CodeTagExtractor } from '../ranker/CodeTagExtractor';
-import { TagQuery } from '../ranker/TagQuery.node';
+import { NodeTagQuery } from '../ranker/TagQuery.node';
 import { DefRefs } from '../ranker/DefRefs';
 
 describe('TagRanker', () => {
   let tagRanker: TagRanker;
 
   beforeEach(async () => {
-    const extractor = new CodeTagExtractor('', new TagQuery());
+    const extractor = new CodeTagExtractor('', new NodeTagQuery());
     const defRefs = await DefRefs.create(extractor, allSources);
     tagRanker = defRefs.createTagranker();
   });

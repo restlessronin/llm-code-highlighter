@@ -1,11 +1,11 @@
 import assert from 'assert';
 import _ from 'lodash';
 import { Tag, DefRefs, CodeTagExtractor, getLinguistLanguage } from './ranker/';
-import { TagQuery } from './ranker/TagQuery.node';
+import { NodeTagQuery } from './ranker/TagQuery.node';
 import { generateHighlightedSourceCode } from './highlighter/';
 
 async function createRankedTags(sources: { relPath: string; code: string }[]) {
-  const extractor = new CodeTagExtractor('', new TagQuery());
+  const extractor = new CodeTagExtractor('', new NodeTagQuery());
   const defRefs = await DefRefs.create(extractor, sources);
   return defRefs.createTagranker().pagerank();
 }
