@@ -13,9 +13,15 @@ npm install llm-code-highlighter
 ```
 
 ## Usage
+
+### Node
 ```typescript
 import { fileHighlights } from 'llm-code-highlighter';
 ```
+
+### Browser
+
+The module is in the process of being browserified 
 
 ## Contributing
 
