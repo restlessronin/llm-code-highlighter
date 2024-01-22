@@ -6,5 +6,5 @@ export async function getRepoHighlights(
   chatSources: { relPath: string; code: string }[],
   otherSources: { relPath: string; code: string }[]
 ) {
-  generateRepoHighlights(topPercentile, chatSources, otherSources, new BrowserContentPath());
+  return generateRepoHighlights(topPercentile, chatSources, otherSources, new BrowserContentPath());
 }
