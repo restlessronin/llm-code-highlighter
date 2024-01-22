@@ -1,4 +1,3 @@
-import assert from 'assert';
 import _ from 'lodash';
 import { Tag, DefRefs, CodeTagExtractor, IContentPath } from './ranker';
 import { generateFileHighlights } from './highlighter';
@@ -28,7 +27,8 @@ export async function generateRepoHighlights(
   otherSources: { relPath: string; code: string }[],
   contentPath: IContentPath
 ) {
-  assert(0 < topPercentile && topPercentile <= 1);
+  if (topPercentile <= 0 || 1 < topPercentile)
+    throw new Error('topPercentile must be between 0 and 1');
   const allSources = [...chatSources, ...otherSources];
   const rankedTags = await createRankedTags(allSources, contentPath);
   const chatRelPaths = chatSources.map(source => source.relPath);

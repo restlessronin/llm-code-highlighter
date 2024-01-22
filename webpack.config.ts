@@ -20,6 +20,10 @@ const config: Configuration = {
     ],
   },
   resolve: {
+    fallback: {
+      fs: false,
+      path: false,
+    },
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
