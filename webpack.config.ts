@@ -4,6 +4,7 @@ import { Configuration, node } from 'webpack';
 const config: Configuration = {
   mode: 'production',
   entry: {
+    'index.node': './src/index.node.ts',
     'index.browser': './src/index.browser.ts',
   },
   module: {

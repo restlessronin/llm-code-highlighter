@@ -10,9 +10,10 @@
   },
   "scripts": {
     "test": "jest",
+    "copy:scheme": "cpy 'src/tag-qry/**/*' 'dist/tag-qry/' --parents",
     "build:tsc": "tsc",
     "build:webpack": "webpack --config webpack.config.ts",
-    "build": "npm run build:tsc && npm run build:webpack"
+    "build": "npm run copy:scheme && npm run build:tsc && npm run build:webpack"
   },
   "keywords": [],
   "author": "restlessronin",
@@ -26,6 +27,7 @@
     "@types/webpack": "^5.28.5",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
+    "cpy-cli": "^5.0.0",
     "esbuild-register": "^3.5.0",
     "eslint": "^8.56.0",
     "eslint-config-airbnb": "^19.0.4",
