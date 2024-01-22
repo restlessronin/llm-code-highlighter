@@ -1,7 +1,7 @@
 import assert from 'assert';
 import _ from 'lodash';
-import { Tag, DefRefs, CodeTagExtractor, IContentPath } from './ranker/';
-import { generateFileHighlights } from './highlighter/';
+import { Tag, DefRefs, CodeTagExtractor, IContentPath } from './ranker';
+import { generateFileHighlights } from './highlighter';
 
 async function createRankedTags(
   sources: { relPath: string; code: string }[],

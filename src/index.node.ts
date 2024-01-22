@@ -1,4 +1,4 @@
-import { generateRepoHighlights } from '.';
+import { generateRepoHighlights } from './index.shared';
 import { NodeContentPath } from './ranker/ContentPath.node';
 
 export async function getRepoHighlights(
