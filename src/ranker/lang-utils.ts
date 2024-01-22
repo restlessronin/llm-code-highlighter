@@ -1,51 +1,74 @@
-import linguist from 'linguist-languages';
-
 type Language =
   | 'C'
   | 'C#'
   | 'C++'
+  | 'Elisp'
+  | 'Elixir'
+  | 'Elm'
   | 'Go'
   | 'Java'
   | 'JavaScript'
+  | 'Ocaml'
   | 'PHP'
   | 'Python'
+  | 'QL'
   | 'Ruby'
   | 'Rust'
   | 'TypeScript';
 
-const _lang2QueryFileName: Record<Language, string> = {
+const extToLang: Record<string, Language> = {
+  py: 'Python',
+  js: 'JavaScript',
+  mjs: 'JavaScript',
+  go: 'Go',
+  c: 'C',
+  cc: 'C++',
+  cs: 'C#',
+  cpp: 'C++',
+  el: 'Elisp',
+  ex: 'Elixir',
+  elm: 'Elm',
+  java: 'Java',
+  ml: 'Ocaml',
+  php: 'PHP',
+  ql: 'QL',
+  rb: 'Ruby',
+  rs: 'Rust',
+  tsx: 'TypeScript',
+  ts: 'TypeScript',
+};
+
+const lang2QryNameString: Record<Language, string> = {
   C: 'c',
   'C#': 'c_sharp',
   'C++': 'cpp',
+  Elisp: 'elisp',
+  Elixir: 'elixir',
+  Elm: 'elm',
   Go: 'go',
   Java: 'java',
   JavaScript: 'javascript',
+  Ocaml: 'ocaml',
   PHP: 'php',
   Python: 'python',
+  QL: 'ql',
   Ruby: 'ruby',
   Rust: 'rust',
   TypeScript: 'typescript',
 };
 
-export function getLinguistLanguage(filename: string) {
+export function getLanguage(filename: string) {
   const extension = filename.split('.').pop();
-  if (!extension) {
-    return undefined;
-  }
-  for (const lang of Object.values(linguist)) {
-    if (lang.extensions?.includes('.' + extension)) {
-      return lang.name;
-    }
-  }
-  return undefined;
+  if (!extension || !(extension in extToLang)) return;
+  return extToLang[extension];
 }
 
 export function getQueryFileName(lang: string) {
-  if (!(lang in _lang2QueryFileName)) return;
-  return `tree-sitter-${_lang2QueryFileName[lang as Language]}-tags.scm`;
+  if (!(lang in lang2QryNameString)) return;
+  return `tree-sitter-${lang2QryNameString[lang as Language]}-tags.scm`;
 }
 
 export function getWasmPath(lang: string) {
-  if (!(lang in _lang2QueryFileName)) return;
-  return `tree-sitter-${_lang2QueryFileName[lang as Language]}.wasm`;
+  if (!(lang in lang2QryNameString)) return;
+  return `tree-sitter-${lang2QryNameString[lang as Language]}.wasm`;
 }
