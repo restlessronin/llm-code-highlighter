@@ -45,7 +45,6 @@
   "dependencies": {
     "graphology": "^0.25.4",
     "graphology-metrics": "^2.2.0",
-    "linguist-languages": "^7.27.0",
     "lodash": "^4.17.21",
     "tree-sitter-wasms": "^0.1.6",
     "web-tree-sitter": "^0.20.8"
