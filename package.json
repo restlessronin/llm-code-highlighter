@@ -2,6 +2,14 @@
   "name": "llm-code-highlighter",
   "version": "0.0.1",
   "description": "Condense source code for LLM analysis by extracting essential highlights, utilizing Paul Gauthier's repomap technique from Aider Chat.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/restlessronin/llm-code-highlighter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/restlessronin/llm-code-highlighter/issues"
+  },
+  "homepage": "https://github.com/restlessronin/llm-code-highlighter#readme",
   "main": "dist/index.node.js",
   "browser": {
     "entry-point": "dist/index.browser.js",
