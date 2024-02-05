@@ -4,19 +4,6 @@ import pagerank from 'graphology-metrics/centrality/pagerank';
 import { Tag } from './common';
 import { RankedTags } from './RankedTags';
 
-class _Counter extends Map<string, number> {
-  constructor(iterable: Iterable<string> = []) {
-    super();
-    for (let item of iterable) {
-      this.add(item);
-    }
-  }
-
-  add(item: any) {
-    this.set(item, (this.get(item) || 0) + 1);
-  }
-}
-
 export class TagRanker {
   constructor(
     readonly workspacePath: string,
@@ -28,6 +15,19 @@ export class TagRanker {
   ) {}
 
   pagerank() {
+    class _Counter extends Map<string, number> {
+      constructor(iterable: Iterable<string> = []) {
+        super();
+        for (let item of iterable) {
+          this.add(item);
+        }
+      }
+
+      add(item: any) {
+        this.set(item, (this.get(item) || 0) + 1);
+      }
+    }
+
     const G = new MultiGraph();
     this.identifiers.forEach(ident => {
       const definers = this.defines.get(ident);
