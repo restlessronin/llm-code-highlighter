@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Tag, ITagExtractor } from './common';
-import { TagRanker } from './tagranker';
+import { TagRanker } from './TagRanker';
 
 export type Source = { relPath: string; code: string };
 export type DefRef = { relPath: string; all: Tag[]; defs: Tag[]; refs: Tag[] };

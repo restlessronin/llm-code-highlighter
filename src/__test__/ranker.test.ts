@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { TagRanker } from '../ranker/tagranker';
+import { TagRanker } from '../ranker/TagRanker';
 
 import { allSources } from './codefixture';
 import { CodeTagExtractor } from '../ranker/CodeTagExtractor';
