@@ -12,7 +12,7 @@ describe('TagRanker', () => {
   beforeEach(async () => {
     const extractor = new CodeTagExtractor('', new NodeContentPath());
     const defRefs = await DefRefs.create(extractor, allSources);
-    tagRanker = defRefs.createTagranker();
+    tagRanker = defRefs!.createTagranker()!;
   });
 
   describe('create', () => {

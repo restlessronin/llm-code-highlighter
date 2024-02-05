@@ -15,7 +15,9 @@ export class DefRefs {
         return { relPath: source.relPath, all: tags, defs: defs, refs: refs } as DefRef;
       })
     );
-    return new DefRefs(tagGetter.workspacePath, defRefs);
+    const nonEmpty = defRefs.filter(defRef => defRef.defs.length != 0 || defRef.refs.length != 0);
+    if (nonEmpty.length == 0) return;
+    return new DefRefs(tagGetter.workspacePath, nonEmpty);
   }
 
   constructor(readonly workspacePath: string, readonly defRefs: DefRef[]) {}
@@ -57,6 +59,7 @@ export class DefRefs {
     const relPaths = this.defRefs.map(defRef => {
       return defRef.relPath;
     });
+    if (defines.size === 0 || definitions.size === 0 || references.size === 0) return;
     const identifiers = Array.from(defines.keys()).filter(key => references.has(key));
     return new TagRanker(
       this.workspacePath,

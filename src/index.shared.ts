@@ -8,7 +8,10 @@ async function createRankedTags(
 ) {
   const extractor = new CodeTagExtractor('', contentPath);
   const defRefs = await DefRefs.create(extractor, sources);
-  return defRefs.createTagranker().pagerank();
+  if (!defRefs) return;
+  const tagRanker = defRefs.createTagranker();
+  if (!tagRanker) return;
+  return tagRanker.pagerank();
 }
 
 async function generateFileHighlightsFromTags(
@@ -31,6 +34,7 @@ export async function generateRepoHighlights(
     throw new Error('topPercentile must be between 0 and 1');
   const allSources = [...chatSources, ...otherSources];
   const rankedTags = await createRankedTags(allSources, contentPath);
+  if (!rankedTags) return;
   const chatRelPaths = chatSources.map(source => source.relPath);
   const topTags = rankedTags.without(chatRelPaths).toTags();
   const maxTags = _.round(topPercentile * topTags.length);
