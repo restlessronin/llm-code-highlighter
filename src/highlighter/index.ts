@@ -1,4 +1,4 @@
-import { Tag, getLinguistLanguage, IContentPath, AST } from '../ranker';
+import { Tag, getLanguage, IContentPath, AST } from '../ranker';
 import { HighlightConfiguration, LineOfInterest } from './common';
 import { CodeLineScopeTracker } from './CodeLineScopeTracker';
 import { ScopeLineIntegrator } from './ScopeLineIntegrator';
@@ -11,7 +11,7 @@ export async function generateFileHighlights(
   linesOfInterest: LineOfInterest[],
   contentPath: IContentPath
 ) {
-  const language = getLinguistLanguage(relPath)!;
+  const language = getLanguage(relPath)!;
   const codeLines = code.split('\n');
   if (!language) return;
   const wasmPath = contentPath.getWasmURL(language);
