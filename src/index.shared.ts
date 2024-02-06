@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { IContentPath, createDefRefs, Source, SourceSet } from './tagger';
 import { createRankedTags } from './ranker';
 import { generateFileHighlightsFromTags } from './highlighter';
+import { createOutlines } from './outliner';
 
 export async function generateSourceSetHighlights(
   topPercentile: number,
@@ -29,10 +30,9 @@ export async function generateSourceSetHighlights(
 }
 
 export async function generateFileOutlineHighlights(sourceSet: SourceSet) {
-  const defRefs = await createDefRefs(sourceSet);
-  if (!defRefs) return;
-  const defs = defRefs.defRefs.map(defRef => defRef.defs);
-  const fileOutlines = _.zip(defs, sourceSet.sources)
+  const outlines = await createOutlines(sourceSet);
+  if (!outlines) return;
+  const fileOutlines = _.zip(outlines, sourceSet.sources)
     .filter(([tags, _sources]) => {
       return tags;
     })

@@ -3,7 +3,7 @@ export { AST } from './AST';
 export { getLanguage } from './lang-utils';
 
 import { CodeTagExtractor } from './CodeTagExtractor';
-import { Source } from './DefRef';
+import { DefRef, Source } from './DefRef';
 import { DefRefs } from './DefRefs';
 import { IContentPath } from './common';
 
@@ -20,4 +20,4 @@ export async function createTags(sourceSet: SourceSet) {
   return defRefs.createTags();
 }
 
-export { Source, IContentPath, SourceSet };
+export { Source, IContentPath, SourceSet, DefRef };

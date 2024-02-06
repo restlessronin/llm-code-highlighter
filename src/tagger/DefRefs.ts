@@ -4,17 +4,8 @@ import { Tags } from './Tags';
 import { Source, DefRef } from './DefRef';
 
 export class DefRefs {
-  static async createDefRefs(tagGetter: ITagExtractor, sources: Source[]) {
-    const defRefs = await Promise.all(
-      sources.map(async source => {
-        return DefRef.create(tagGetter, source);
-      })
-    );
-    return defRefs;
-  }
-
   static async create(tagGetter: ITagExtractor, sources: Source[]) {
-    const defRefs = await DefRefs.createDefRefs(tagGetter, sources);
+    const defRefs = await DefRef.createEach(tagGetter, sources);
     const nonEmpty = defRefs.filter(defRef => defRef.defs.length != 0 || defRef.refs.length != 0);
     if (nonEmpty.length == 0) return;
     return new DefRefs(tagGetter.workspacePath, nonEmpty);
