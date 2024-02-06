@@ -3,7 +3,8 @@ export { AST } from './AST';
 export { getLanguage } from './lang-utils';
 
 import { CodeTagExtractor } from './CodeTagExtractor';
-import { Source, DefRefs } from './DefRefs';
+import { Source } from './DefRef';
+import { DefRefs } from './DefRefs';
 import { IContentPath } from './common';
 
 type SourceSet = { contentPath: IContentPath; sources: Source[] };

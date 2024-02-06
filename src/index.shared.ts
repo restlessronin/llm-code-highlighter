@@ -31,14 +31,13 @@ export async function generateSourceSetHighlights(
 export async function generateFileOutlineHighlights(sourceSet: SourceSet) {
   const defRefs = await createDefRefs(sourceSet);
   if (!defRefs) return;
-  /*   const mapTags = topTags.slice(0, maxTags);
-  const sortedTags = _.orderBy(mapTags, ['relPath', 'start.ln'], ['asc', 'asc']);
-  const groupedTags = _.groupBy(sortedTags, tag => tag.relPath);
-  const fileHighlights = _.values(groupedTags).map(tags => {
-    const relPath = tags[0].relPath;
-    const code = allSources.find(source => source.relPath === relPath)!.code;
-    return generateFileHighlightsFromTags(tags, code, contentPath);
-  });
-  return _.join(fileHighlights, '');
- */
+  const defs = defRefs.defRefs.map(defRef => defRef.defs);
+  const fileOutlines = _.zip(defs, sourceSet.sources)
+    .filter(([tags, _sources]) => {
+      return tags;
+    })
+    .map(([tags, source]) => {
+      return generateFileHighlightsFromTags(tags!, source!.code, sourceSet.contentPath);
+    });
+  return _.join(fileOutlines, '');
 }

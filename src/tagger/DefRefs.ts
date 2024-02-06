@@ -1,20 +1,20 @@
 import _ from 'lodash';
 import { Tag, ITagExtractor } from './common';
 import { Tags } from './Tags';
-
-export type Source = { relPath: string; code: string };
-export type DefRef = { relPath: string; all: Tag[]; defs: Tag[]; refs: Tag[] };
+import { Source, DefRef } from './DefRef';
 
 export class DefRefs {
-  static async create(tagGetter: ITagExtractor, sources: Source[]) {
+  static async createDefRefs(tagGetter: ITagExtractor, sources: Source[]) {
     const defRefs = await Promise.all(
       sources.map(async source => {
-        const tags = await tagGetter.extractTags(source.relPath, source.code);
-        const defs = tags.filter(tag => tag.kind === 'def');
-        const refs = tags.filter(tag => tag.kind === 'ref');
-        return { relPath: source.relPath, all: tags, defs: defs, refs: refs } as DefRef;
+        return DefRef.create(tagGetter, source);
       })
     );
+    return defRefs;
+  }
+
+  static async create(tagGetter: ITagExtractor, sources: Source[]) {
+    const defRefs = await DefRefs.createDefRefs(tagGetter, sources);
     const nonEmpty = defRefs.filter(defRef => defRef.defs.length != 0 || defRef.refs.length != 0);
     if (nonEmpty.length == 0) return;
     return new DefRefs(tagGetter.workspacePath, nonEmpty);
