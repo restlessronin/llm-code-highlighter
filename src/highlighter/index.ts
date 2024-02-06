@@ -1,4 +1,4 @@
-import { getLanguage, IContentPath, AST } from '../tagger';
+import { Tag, getLanguage, IContentPath, AST } from '../tagger';
 import { HighlightConfiguration, LineOfInterest } from './common';
 import { CodeLineScopeTracker } from './CodeLineScopeTracker';
 import { ScopeLineIntegrator } from './ScopeLineIntegrator';
@@ -25,4 +25,14 @@ export async function generateFileHighlights(
   if (!codeHighlighter) return;
   const highlights = codeHighlighter.withSmallGapsClosed().toFormattedString();
   return `\n${relPath}\n${highlights}`;
+}
+
+export async function generateFileHighlightsFromTags(
+  tags: Tag[],
+  code: string,
+  contentPath: IContentPath
+) {
+  const relPath = tags[0].relPath;
+  const linesOfInterest = tags.map(tag => tag.start.ln - 1);
+  return generateFileHighlights(relPath, code, linesOfInterest, contentPath);
 }

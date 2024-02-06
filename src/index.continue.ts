@@ -1,4 +1,4 @@
-import { generateRepoHighlights } from './index.shared';
+import { generateFileSetHighlights } from './index.shared';
 import { ContinueContentPath } from './tagger/ContentPath.continue';
 
 export async function getRepoHighlights(
@@ -6,7 +6,7 @@ export async function getRepoHighlights(
   chatSources: { relPath: string; code: string }[],
   otherSources: { relPath: string; code: string }[]
 ) {
-  return generateRepoHighlights(
+  return generateFileSetHighlights(
     topPercentile,
     chatSources,
     otherSources,

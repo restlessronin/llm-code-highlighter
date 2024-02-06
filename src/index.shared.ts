@@ -1,32 +1,9 @@
 import _ from 'lodash';
-import { Tag, CodeTagExtractor, IContentPath, DefRefs } from './tagger';
-import { TagRanker } from './ranker';
-import { generateFileHighlights } from './highlighter';
+import { IContentPath } from './tagger';
+import { createRankedTags } from './ranker';
+import { generateFileHighlightsFromTags } from './highlighter';
 
-async function createRankedTags(
-  sources: { relPath: string; code: string }[],
-  contentPath: IContentPath
-) {
-  const extractor = new CodeTagExtractor('', contentPath);
-  const defRefs = await DefRefs.create(extractor, sources);
-  if (!defRefs) return;
-  const tags = defRefs.createTags();
-  if (!tags) return;
-  const tagRanker = new TagRanker(tags);
-  return tagRanker.pagerank();
-}
-
-async function generateFileHighlightsFromTags(
-  tags: Tag[],
-  code: string,
-  contentPath: IContentPath
-) {
-  const relPath = tags[0].relPath;
-  const linesOfInterest = tags.map(tag => tag.start.ln - 1);
-  return generateFileHighlights(relPath, code, linesOfInterest, contentPath);
-}
-
-export async function generateRepoHighlights(
+export async function generateFileSetHighlights(
   topPercentile: number,
   chatSources: { relPath: string; code: string }[],
   otherSources: { relPath: string; code: string }[],
@@ -50,3 +27,8 @@ export async function generateRepoHighlights(
   });
   return _.join(fileHighlights, '');
 }
+
+export async function generateFileOutlineHighlights(
+  sources: { relPath: string; code: string }[],
+  contentPath: IContentPath
+) {}

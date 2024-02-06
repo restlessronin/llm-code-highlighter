@@ -1,4 +1,4 @@
-import { Tag } from '../tagger/common';
+import { Tag } from '../tagger';
 
 export class RankedTags {
   constructor(
