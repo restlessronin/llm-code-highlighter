@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Tag, DefRefs, CodeTagExtractor, IContentPath } from './ranker';
+import { Tag, CodeTagExtractor, IContentPath, DefRefs } from './tagger';
+import { TagRanker } from './ranker';
 import { generateFileHighlights } from './highlighter';
 
 async function createRankedTags(
@@ -9,8 +10,9 @@ async function createRankedTags(
   const extractor = new CodeTagExtractor('', contentPath);
   const defRefs = await DefRefs.create(extractor, sources);
   if (!defRefs) return;
-  const tagRanker = defRefs.createTagranker();
-  if (!tagRanker) return;
+  const tags = defRefs.createTags();
+  if (!tags) return;
+  const tagRanker = new TagRanker(tags);
   return tagRanker.pagerank();
 }
 

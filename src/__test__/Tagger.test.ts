@@ -1,6 +1,6 @@
-import { AST } from '../ranker/AST';
-import { NodeContentPath } from '../ranker/ContentPath.node';
-import { Tagger } from '../ranker/Tagger';
+import { AST } from '../tagger/AST';
+import { NodeContentPath } from '../tagger/ContentPath.node';
+import { Tagger } from '../tagger/Tagger';
 
 describe('Tagger', () => {
   const jsQueryScm = `

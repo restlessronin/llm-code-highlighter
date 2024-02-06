@@ -1,4 +1,4 @@
-import { Tag, getLanguage, IContentPath, AST } from '../ranker';
+import { getLanguage, IContentPath, AST } from '../tagger';
 import { HighlightConfiguration, LineOfInterest } from './common';
 import { CodeLineScopeTracker } from './CodeLineScopeTracker';
 import { ScopeLineIntegrator } from './ScopeLineIntegrator';

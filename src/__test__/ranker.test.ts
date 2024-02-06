@@ -2,9 +2,9 @@ import * as path from 'path';
 import { TagRanker } from '../ranker/TagRanker';
 
 import { allSources } from './codefixture';
-import { CodeTagExtractor } from '../ranker/CodeTagExtractor';
-import { NodeContentPath } from '../ranker/ContentPath.node';
-import { DefRefs } from '../ranker/DefRefs';
+import { CodeTagExtractor } from '../tagger/CodeTagExtractor';
+import { NodeContentPath } from '../tagger/ContentPath.node';
+import { DefRefs } from '../tagger/DefRefs';
 
 describe('TagRanker', () => {
   let tagRanker: TagRanker;
@@ -12,7 +12,8 @@ describe('TagRanker', () => {
   beforeEach(async () => {
     const extractor = new CodeTagExtractor('', new NodeContentPath());
     const defRefs = await DefRefs.create(extractor, allSources);
-    tagRanker = defRefs!.createTagranker()!;
+    const tags = defRefs!.createTags();
+    tagRanker = new TagRanker(tags!);
   });
 
   describe('create', () => {

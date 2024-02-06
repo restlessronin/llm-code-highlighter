@@ -1,5 +1,5 @@
 import { generateRepoHighlights } from './index.shared';
-import { ContinueContentPath } from './ranker/ContentPath.continue';
+import { ContinueContentPath } from './tagger/ContentPath.continue';
 
 export async function getRepoHighlights(
   topPercentile: number,

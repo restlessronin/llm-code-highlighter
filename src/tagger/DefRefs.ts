@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Tag, ITagExtractor } from './common';
-import { TagRanker } from './TagRanker';
+import { Tags } from './Tags';
 
 export type Source = { relPath: string; code: string };
 export type DefRef = { relPath: string; all: Tag[]; defs: Tag[]; refs: Tag[] };
@@ -32,7 +32,7 @@ export class DefRefs {
     map.get(key)?.push(value);
   }
 
-  createTagranker() {
+  createTags() {
     const defines = new Map<string, Set<string>>();
     this.defRefs.forEach(defRef => {
       (defRef.defs as Tag[]).forEach(def => {
@@ -61,13 +61,6 @@ export class DefRefs {
     });
     if (defines.size === 0 || definitions.size === 0 || references.size === 0) return;
     const identifiers = Array.from(defines.keys()).filter(key => references.has(key));
-    return new TagRanker(
-      this.workspacePath,
-      relPaths,
-      defines,
-      definitions,
-      references,
-      identifiers
-    );
+    return new Tags(this.workspacePath, relPaths, defines, definitions, references, identifiers);
   }
 }

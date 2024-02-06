@@ -1,5 +1,5 @@
 import { generateRepoHighlights } from './index.shared';
-import { BrowserContentPath } from './ranker/ContentPath.browser';
+import { BrowserContentPath } from './tagger/ContentPath.browser';
 
 export async function getRepoHighlights(
   topPercentile: number,

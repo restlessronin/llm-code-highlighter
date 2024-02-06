@@ -1,18 +1,11 @@
 import _ from 'lodash';
 import MultiGraph from 'graphology';
 import pagerank from 'graphology-metrics/centrality/pagerank';
-import { Tag } from './common';
+import { Tags } from '../tagger/Tags';
 import { RankedTags } from './RankedTags';
 
 export class TagRanker {
-  constructor(
-    readonly workspacePath: string,
-    readonly relPaths: string[],
-    readonly defines: Map<string, Set<string>>,
-    readonly definitions: Map<string, Set<Tag>>,
-    readonly references: Map<string, string[]>,
-    readonly identifiers: string[]
-  ) {}
+  constructor(readonly tags: Tags) {}
 
   pagerank() {
     class _Counter extends Map<string, number> {
@@ -28,10 +21,11 @@ export class TagRanker {
       }
     }
 
+    const tags = this.tags;
     const G = new MultiGraph();
-    this.identifiers.forEach(ident => {
-      const definers = this.defines.get(ident);
-      const counter = new _Counter(this.references.get(ident));
+    tags.identifiers.forEach(ident => {
+      const definers = tags.defines.get(ident);
+      const counter = new _Counter(tags.references.get(ident));
       counter.forEach((numRefs, referencer) => {
         (definers as Set<string>).forEach(definer => {
           G.mergeEdge(referencer, definer, { weight: numRefs, ident: ident });
@@ -63,6 +57,6 @@ export class TagRanker {
       (a, b) => b[1] - a[1]
     );
     const rankedFiles = Object.entries(rankedFilesMap).sort((a, b) => b[1] - a[1]);
-    return new RankedTags(this.definitions, rankedFiles, rankedDefinitions);
+    return new RankedTags(tags.definitions, rankedFiles, rankedDefinitions);
   }
 }

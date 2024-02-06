@@ -1,4 +1,4 @@
-import { Parser } from '../ranker/TreeSitter';
+import { Parser } from '../tagger/TreeSitter';
 import { Scope, HighlightConfiguration } from './common';
 
 export class CodeLineScopeTracker {

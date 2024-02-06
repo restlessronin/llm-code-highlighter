@@ -1,5 +1,5 @@
 import { generateRepoHighlights } from './index.shared';
-import { NodeContentPath } from './ranker/ContentPath.node';
+import { NodeContentPath } from './tagger/ContentPath.node';
 
 /**
  * Generates highlights for a repository by selecting the top percentile of ranked tags from non-chat sources.
