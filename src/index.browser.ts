@@ -1,4 +1,4 @@
-import { generateFileSetHighlights } from './index.shared';
+import { generateSourceSetHighlights } from './index.shared';
 import { BrowserContentPath } from './tagger/ContentPath.browser';
 
 export async function getRepoHighlights(
@@ -6,7 +6,7 @@ export async function getRepoHighlights(
   chatSources: { relPath: string; code: string }[],
   otherSources: { relPath: string; code: string }[]
 ) {
-  return generateFileSetHighlights(
+  return generateSourceSetHighlights(
     topPercentile,
     chatSources,
     otherSources,

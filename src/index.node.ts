@@ -1,4 +1,4 @@
-import { generateFileSetHighlights } from './index.shared';
+import { generateSourceSetHighlights } from './index.shared';
 import { NodeContentPath } from './tagger/ContentPath.node';
 
 /**
@@ -19,5 +19,10 @@ export async function getRepoHighlights(
   chatSources: { relPath: string; code: string }[],
   otherSources: { relPath: string; code: string }[]
 ) {
-  return generateFileSetHighlights(topPercentile, chatSources, otherSources, new NodeContentPath());
+  return generateSourceSetHighlights(
+    topPercentile,
+    chatSources,
+    otherSources,
+    new NodeContentPath()
+  );
 }
