@@ -3,19 +3,19 @@ import { Tag, ITagExtractor } from './common';
 export type Source = { relPath: string; code: string };
 
 export class DefRef {
-  static async createEach(tagGetter: ITagExtractor, sources: Source[]) {
+  static async createEach(extractor: ITagExtractor, sources: Source[]) {
     return await Promise.all(
       sources.map(async source => {
-        return DefRef.create(tagGetter, source);
+        return DefRef.create(extractor, source);
       })
     );
   }
 
-  static async create(tagGetter: ITagExtractor, source: Source) {
-    const tags = await tagGetter.extractTags(source.relPath, source.code);
+  static async create(extractor: ITagExtractor, source: Source) {
+    const tags = await extractor.extractTags(source.relPath, source.code);
     const defs = tags.filter(tag => tag.kind === 'def');
     const refs = tags.filter(tag => tag.kind === 'ref');
-    return { relPath: source.relPath, all: tags, defs: defs, refs: refs } as DefRef;
+    return new DefRef(source.relPath, tags, defs, refs);
   }
 
   constructor(

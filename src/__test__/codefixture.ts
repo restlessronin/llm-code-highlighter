@@ -24,7 +24,9 @@ print(my_function(3, 4))
 `,
 };
 
-export const test_typescript_code = `import { Tag } from '../tagger';
+export const test_typescript_code = {
+  relPath: 'test_typescript_code.ts',
+  code: `import { Tag } from '../tagger';
 
 export class RankedTags {
   constructor(
@@ -57,6 +59,7 @@ export class RankedTags {
     return [...this.rankedFiles.map(([relPath, _rank]) => relPath), ...missingFiles];
   }
 }
-`;
+`,
+};
 
 export const pythonSources = [test_file_with_identifiers, test_file_import, test_file_pass];
