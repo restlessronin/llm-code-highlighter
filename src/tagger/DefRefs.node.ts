@@ -1,9 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import _ from 'lodash';
-import { Source } from './DefRef';
+import { ITagExtractor, Source } from './common';
 import { DefRefs } from './DefRefs';
-import { ITagExtractor } from './common';
 
 export async function createDefRefsFromFiles(tagGetter: ITagExtractor, absPaths: string[]) {
   const sources = absPaths.map(

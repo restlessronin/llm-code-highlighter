@@ -1,3 +1,5 @@
+export type Source = { relPath: string; code: string };
+
 export type Tag = {
   relPath: string;
   text: string;
@@ -14,7 +16,7 @@ export type Tag = {
 
 export interface ITagExtractor {
   workspacePath: string;
-  extractTags(relPath: string, code: string): Promise<Tag[]>;
+  extractTags(source: Source): Promise<Tag[]>;
 }
 
 export interface IContentPath {

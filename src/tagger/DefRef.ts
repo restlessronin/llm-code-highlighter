@@ -1,6 +1,4 @@
-import { Tag, ITagExtractor } from './common';
-
-export type Source = { relPath: string; code: string };
+import { Tag, ITagExtractor, Source } from './common';
 
 export class DefRef {
   static async createEach(extractor: ITagExtractor, sources: Source[]) {
@@ -12,7 +10,7 @@ export class DefRef {
   }
 
   static async create(extractor: ITagExtractor, source: Source) {
-    const tags = await extractor.extractTags(source.relPath, source.code);
+    const tags = await extractor.extractTags(source);
     const defs = tags.filter(tag => tag.kind === 'def');
     const refs = tags.filter(tag => tag.kind === 'ref');
     return new DefRef(source.relPath, tags, defs, refs);

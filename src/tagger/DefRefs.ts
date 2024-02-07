@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import { Tag, ITagExtractor } from './common';
+import { Tag, ITagExtractor, Source } from './common';
 import { Tags } from './Tags';
-import { Source, DefRef } from './DefRef';
+import { DefRef } from './DefRef';
 
 export class DefRefs {
   static async create(tagGetter: ITagExtractor, sources: Source[]) {

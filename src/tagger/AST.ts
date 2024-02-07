@@ -1,10 +1,11 @@
+import { Source } from './common';
 import { TreeSitter, Parser } from './TreeSitter';
 
 export class AST {
-  static async createFromCode(relPath: string, code: string, wasmPath: string, language: string) {
+  static async createFromCode(source: Source, wasmPath: string, language: string) {
     const treeSitter = await TreeSitter.create(wasmPath, language);
-    const tree = treeSitter.parse(code);
-    return new AST(treeSitter, tree, relPath);
+    const tree = treeSitter.parse(source.code);
+    return new AST(treeSitter, tree, source.relPath);
   }
 
   constructor(

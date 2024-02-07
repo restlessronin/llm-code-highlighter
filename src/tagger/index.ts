@@ -2,10 +2,10 @@ export { Tag } from './common';
 export { AST } from './AST';
 export { getLanguage } from './lang-utils';
 
+import { IContentPath, Source } from './common';
 import { CodeTagExtractor } from './CodeTagExtractor';
-import { DefRef, Source } from './DefRef';
+import { DefRef } from './DefRef';
 import { DefRefs } from './DefRefs';
-import { IContentPath } from './common';
 
 type SourceSet = { contentPath: IContentPath; sources: Source[] };
 

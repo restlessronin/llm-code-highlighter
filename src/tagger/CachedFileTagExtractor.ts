@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Tag, ITagExtractor } from './common';
+import { Tag, ITagExtractor, Source } from './common';
 import { CodeTagExtractor } from './CodeTagExtractor';
 import { NodeContentPath } from './ContentPath.node';
 
@@ -47,11 +47,11 @@ export class CachedFileTagExtractor implements ITagExtractor {
     }
     const code = fs.readFileSync(absPath, 'utf8');
     if (!code) return [];
-    return this.extractor.extractTags(relPath, code);
+    return this.extractor.extractTags({ relPath: relPath, code: code });
   }
 
-  async extractTags(relPath: string, code: string): Promise<Tag[]> {
-    return this.extractor.extractTags(relPath, code);
+  async extractTags(source: Source): Promise<Tag[]> {
+    return this.extractor.extractTags(source);
   }
 
   writeCache() {
