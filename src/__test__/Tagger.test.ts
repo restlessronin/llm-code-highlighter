@@ -99,8 +99,7 @@ describe('Tagger', () => {
       const contentPath = new NodeContentPath();
       const language = 'JavaScript';
       const ast = await AST.createFromCode(
-        'test.js',
-        'let x = 1;',
+        { relPath: 'test.js', code: 'let x = 1;' },
         contentPath.getWasmURL(language),
         language
       );
@@ -113,9 +112,11 @@ describe('Tagger', () => {
       const contentPath = new NodeContentPath();
       const language = 'JavaScript';
       const ast = await AST.createFromCode(
-        'test.js',
-        `let x = 1;
+        {
+          relPath: 'test.js',
+          code: `let x = 1;
       console.log(x);`,
+        },
         contentPath.getWasmURL(language),
         language
       );
