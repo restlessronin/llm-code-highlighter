@@ -32,6 +32,6 @@ export async function generateFileHighlightsFromTags(
   contentPath: IContentPath
 ) {
   const relPath = tags[0].relPath;
-  const linesOfInterest = tags.map(tag => tag.start.ln - 1);
+  const linesOfInterest = tags.map(tag => tag.start.ln);
   return generateFileHighlights({ relPath: relPath, code: code }, linesOfInterest, contentPath);
 }

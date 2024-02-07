@@ -62,4 +62,47 @@ export class RankedTags {
 `,
 };
 
+export const expected_outlines_typescript = ``;
+
+export const test_python_code = {
+  relPath: 'test_python_code.py',
+  code: `def greet(name):
+  return f"Hello, {name}!"
+
+def calculate_area(length, width):
+  return length * width
+
+class Point:
+  def __init__(self, x, y):
+      self.x = x
+      self.y = y
+
+  def distance_to(self, other):
+      dx = self.x - other.x
+      dy = self.y - other.y
+      return (dx**2 + dy**2)**0.5
+
+# Example usage
+print(greet("Alice"))
+print(calculate_area(5, 3))
+point1 = Point(2, 3)
+point2 = Point(4, 5)
+print(point1.distance_to(point2))
+`,
+};
+
+export const expected_outlines_python = `
+test_python_code.py
+█def greet(name):
+⋮...
+█def calculate_area(length, width):
+⋮...
+█class Point:
+█  def __init__(self, x, y):
+│      self.x = x
+⋮...
+█  def distance_to(self, other):
+⋮...
+`;
+
 export const pythonSources = [test_file_with_identifiers, test_file_import, test_file_pass];
