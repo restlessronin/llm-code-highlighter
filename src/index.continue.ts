@@ -1,7 +1,8 @@
-import { generateSourceSetHighlights } from './index.shared';
+import { generateFileOutlineHighlights, generateSourceSetHighlights } from './index.shared';
+import { Source } from './tagger';
 import { ContinueContentPath } from './tagger/ContentPath.continue';
 
-export async function getRepoHighlights(
+export async function getSourceSetHighlights(
   topPercentile: number,
   chatSources: { relPath: string; code: string }[],
   otherSources: { relPath: string; code: string }[]
@@ -12,4 +13,11 @@ export async function getRepoHighlights(
     otherSources,
     new ContinueContentPath()
   );
+}
+
+export async function getFileOutlineHighlights(sources: Source[]) {
+  return generateFileOutlineHighlights({
+    sources: sources,
+    contentPath: new ContinueContentPath(),
+  });
 }
