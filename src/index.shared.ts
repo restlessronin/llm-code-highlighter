@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { IContentPath, Source, SourceSet } from './tagger';
 import { createRankedTags } from './ranker';
 import { generateFileHighlightsFromTags } from './highlighter';
-import { createOutlines } from './outliner';
+import { createOutlines, generateFileOutlineFromTags } from './outliner';
 
 export async function generateSourceSetHighlights(
   topPercentile: number,
@@ -21,23 +21,27 @@ export async function generateSourceSetHighlights(
   const mapTags = topTags.slice(0, maxTags);
   const sortedTags = _.orderBy(mapTags, ['relPath', 'start.ln'], ['asc', 'asc']);
   const groupedTags = _.groupBy(sortedTags, tag => tag.relPath);
-  const fileHighlights = _.values(groupedTags).map(tags => {
-    const relPath = tags[0].relPath;
-    const code = allSources.find(source => source.relPath === relPath)!.code;
-    return generateFileHighlightsFromTags(tags, code, contentPath);
-  });
+  const fileHighlights = await Promise.all(
+    _.values(groupedTags).map(tags => {
+      const relPath = tags[0].relPath;
+      const code = allSources.find(source => source.relPath === relPath)!.code;
+      return generateFileHighlightsFromTags(tags, code, contentPath);
+    })
+  );
   return _.join(fileHighlights, '');
 }
 
 export async function generateFileOutlineHighlights(sourceSet: SourceSet) {
   const outlines = await createOutlines(sourceSet);
   if (!outlines) return;
-  const fileOutlines = _.zip(outlines, sourceSet.sources)
-    .filter(([tags, _sources]) => {
-      return tags;
-    })
-    .map(([tags, source]) => {
-      return generateFileHighlightsFromTags(tags!, source!.code, sourceSet.contentPath);
-    });
+  const fileOutlines = await Promise.all(
+    _.zip(outlines, sourceSet.sources)
+      .filter(([tags, _sources]) => {
+        return tags;
+      })
+      .map(([tags, source]) => {
+        return generateFileOutlineFromTags(tags!, source!.code, sourceSet.contentPath);
+      })
+  );
   return _.join(fileOutlines, '');
 }

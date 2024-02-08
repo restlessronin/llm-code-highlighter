@@ -9,7 +9,7 @@ export class Outliner {
     const relPath = fileTags[0].relPath;
     const linesOfInterest = fileTags.map(tag => tag.start.ln);
     const source = { relPath: relPath, code: code };
-    return await Outliner.createFromLOI(linesOfInterest, source, contentPath);
+    return Outliner.createFromLOI(linesOfInterest, source, contentPath);
   }
 
   static async createFromLOI(
