@@ -27,4 +27,4 @@ export async function createTags(sourceSet: SourceSet) {
   return defRefs.createTags();
 }
 
-export { Source, IContentPath, SourceSet, DefRef };
+export { Source, IContentPath, SourceSet, DefRef, AST };

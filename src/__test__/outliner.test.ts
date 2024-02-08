@@ -1,7 +1,7 @@
 import { CodeTagExtractor } from '../tagger/CodeTagExtractor';
 import { NodeContentPath } from '../tagger/ContentPath.node';
 import { DefRef } from '../tagger/DefRef';
-import { generateFileHighlights, generateFileHighlightsFromTags } from '../highlighter';
+import { generateFileOutlineFromTags } from '../outliner';
 import {
   test_typescript_code,
   expected_outlines_typescript,
@@ -29,11 +29,7 @@ describe('outliner', () => {
     it('should return python definitions', async () => {
       const defRef = await DefRef.create(extractor, test_python_code);
       const defs = defRef.defs;
-      const outline = await generateFileHighlightsFromTags(
-        defs,
-        test_python_code.code,
-        contentPath
-      );
+      const outline = await generateFileOutlineFromTags(defs, test_python_code.code, contentPath);
       expect(outline).toBe(expected_outlines_python);
     });
 
@@ -41,7 +37,7 @@ describe('outliner', () => {
       const defRef = await DefRef.create(extractor, test_typescript_code);
       const defs = defRef.defs;
       if (!defs || defs.length === 0) return;
-      const outline = await generateFileHighlightsFromTags(
+      const outline = await generateFileOutlineFromTags(
         defs,
         test_typescript_code.code,
         contentPath

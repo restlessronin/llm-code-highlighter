@@ -62,7 +62,18 @@ export class RankedTags {
 `,
 };
 
-export const expected_outlines_typescript = ``;
+export const expected_outlines_typescript = `
+test_typescript_code.ts
+⋮...
+█export class RankedTags {
+⋮...
+█  without(chatRelPaths: string[]) {
+⋮...
+█  toTags() {
+⋮...
+█  toRankedFiles(files: string[]) {
+⋮...
+`;
 
 export const test_python_code = {
   relPath: 'test_python_code.py',
@@ -99,7 +110,6 @@ test_python_code.py
 ⋮...
 █class Point:
 █  def __init__(self, x, y):
-│      self.x = x
 ⋮...
 █  def distance_to(self, other):
 ⋮...
