@@ -1,13 +1,20 @@
 export { Tag } from './common';
-export { AST } from './AST';
-export { getLanguage } from './lang-utils';
 
+import { AST } from './AST';
+import { getLanguage } from './lang-utils';
 import { IContentPath, Source } from './common';
 import { CodeTagExtractor } from './CodeTagExtractor';
 import { DefRef } from './DefRef';
 import { DefRefs } from './DefRefs';
 
 type SourceSet = { contentPath: IContentPath; sources: Source[] };
+
+export async function createAST(source: Source, contentPath: IContentPath) {
+  const language = getLanguage(source.relPath)!;
+  if (!language) return;
+  const wasmPath = contentPath.getWasmURL(language);
+  return AST.createFromCode(source, wasmPath, language);
+}
 
 export async function createDefRefs(sourceSet: SourceSet) {
   const extractor = new CodeTagExtractor('', sourceSet.contentPath);

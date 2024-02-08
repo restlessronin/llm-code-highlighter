@@ -1,4 +1,4 @@
-import { Tag, getLanguage, IContentPath, AST, Source } from '../tagger';
+import { Tag, createAST, IContentPath, Source } from '../tagger';
 import { HighlightConfiguration, LineOfInterest } from './common';
 import { CodeLineScopeTracker } from './CodeLineScopeTracker';
 import { ScopeLineIntegrator } from './ScopeLineIntegrator';
@@ -10,16 +10,14 @@ export async function generateFileHighlights(
   linesOfInterest: LineOfInterest[],
   contentPath: IContentPath
 ) {
-  const language = getLanguage(source.relPath)!;
+  const ast = await createAST(source, contentPath);
+  if (!ast) return;
   const codeLines = source.code.split('\n');
-  if (!language) return;
-  const wasmPath = contentPath.getWasmURL(language);
-  const ast = await AST.createFromCode(source, wasmPath, language);
   const scopeTracker = CodeLineScopeTracker.create(codeLines.length).withScopeDataInitialized(
     ast.tree.rootNode
   );
   const header = scopeTracker.toDominantScopeBlockRepresentation(mapOptions);
-  const scopeIntegrator = new ScopeLineIntegrator(codeLines, scopeTracker.scopes, header);
+  const scopeIntegrator = new ScopeLineIntegrator(codeLines, header);
   const codeHighlighter = scopeIntegrator.toCodeHighlighter(linesOfInterest);
   if (!codeHighlighter) return;
   const highlights = codeHighlighter.withSmallGapsClosed().toFormattedString();
@@ -27,11 +25,11 @@ export async function generateFileHighlights(
 }
 
 export async function generateFileHighlightsFromTags(
-  tags: Tag[],
+  fileTags: Tag[],
   code: string,
   contentPath: IContentPath
 ) {
-  const relPath = tags[0].relPath;
-  const linesOfInterest = tags.map(tag => tag.start.ln);
+  const relPath = fileTags[0].relPath;
+  const linesOfInterest = fileTags.map(tag => tag.start.ln);
   return generateFileHighlights({ relPath: relPath, code: code }, linesOfInterest, contentPath);
 }

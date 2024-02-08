@@ -1,11 +1,10 @@
-import { Scope, LineOfInterest } from './common';
+import { LineOfInterest } from './common';
 
 export class SourceCodeHighlighter {
   constructor(
     readonly codeLines: string[],
     readonly linesOfInterest: LineOfInterest[],
-    readonly showLines: LineOfInterest[],
-    readonly scopes: Scope[]
+    readonly showLines: LineOfInterest[]
   ) {}
 
   withSmallGapsClosed(): SourceCodeHighlighter {
@@ -20,12 +19,7 @@ export class SourceCodeHighlighter {
     if (sortedShow.length > 0) {
       closedShow.add(sortedShow[sortedShow.length - 1]);
     }
-    return new SourceCodeHighlighter(
-      this.codeLines,
-      this.linesOfInterest,
-      Array.from(closedShow),
-      this.scopes
-    );
+    return new SourceCodeHighlighter(this.codeLines, this.linesOfInterest, Array.from(closedShow));
   }
 
   toFormattedString(): string {
