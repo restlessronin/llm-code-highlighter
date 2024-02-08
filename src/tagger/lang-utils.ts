@@ -1,4 +1,4 @@
-type Language =
+export type Language =
   | 'C'
   | 'C#'
   | 'C++'
