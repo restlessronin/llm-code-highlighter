@@ -5,28 +5,18 @@ import { SourceCodeHighlighter } from '../highlighter/SourceCodeHighlighter';
 const mapOptions = new HighlightConfiguration(10);
 
 export class Outliner {
-  static async create(fileTags: Tag[], code: string, contentPath: IContentPath) {
+  static async create(fileTags: Tag[], code: string) {
     const relPath = fileTags[0].relPath;
     const linesOfInterest = fileTags.map(tag => tag.start.ln);
     const source = { relPath: relPath, code: code };
-    return Outliner.createFromLOI(linesOfInterest, source, contentPath);
+    return Outliner.createFromLOI(linesOfInterest, source);
   }
 
-  static async createFromLOI(
-    linesOfInterest: LineOfInterest[],
-    source: Source,
-    contentPath: IContentPath
-  ) {
-    const ast = await createAST(source, contentPath);
-    if (!ast) return;
-    return new Outliner(source, linesOfInterest, ast);
+  static async createFromLOI(linesOfInterest: LineOfInterest[], source: Source) {
+    return new Outliner(source, linesOfInterest);
   }
 
-  constructor(
-    readonly source: Source,
-    readonly linesOfInterest: LineOfInterest[],
-    readonly ast: AST
-  ) {}
+  constructor(readonly source: Source, readonly linesOfInterest: LineOfInterest[]) {}
 
   toHighlights() {
     const codeLines = this.source.code.split('\n');

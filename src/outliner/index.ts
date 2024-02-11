@@ -13,22 +13,14 @@ export async function createOutlines(sourceSet: SourceSet) {
   return defs.map(defRef => defRef.defs);
 }
 
-export async function generateFileOutlineFromTags(
-  fileTags: Tag[],
-  code: string,
-  contentPath: IContentPath
-) {
-  const highlighter = await Outliner.create(fileTags, code, contentPath);
+export async function generateFileOutlineFromTags(fileTags: Tag[], code: string) {
+  const highlighter = await Outliner.create(fileTags, code);
   if (!highlighter) return;
   return highlighter.toHighlights();
 }
 
-export async function generateFileOutline(
-  source: Source,
-  linesOfInterest: LineOfInterest[],
-  contentPath: IContentPath
-) {
-  const highlighter = await Outliner.createFromLOI(linesOfInterest, source, contentPath);
+export async function generateFileOutline(source: Source, linesOfInterest: LineOfInterest[]) {
+  const highlighter = await Outliner.createFromLOI(linesOfInterest, source);
   if (!highlighter) return;
   return highlighter.toHighlights();
 }

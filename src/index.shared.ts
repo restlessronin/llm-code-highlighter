@@ -40,7 +40,7 @@ export async function generateFileOutlineHighlights(sourceSet: SourceSet) {
         return tags;
       })
       .map(([tags, source]) => {
-        return generateFileOutlineFromTags(tags!, source!.code, sourceSet.contentPath);
+        return generateFileOutlineFromTags(tags!, source!.code);
       })
   );
   return _.join(fileOutlines, '');
