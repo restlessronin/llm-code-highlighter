@@ -1,5 +1,4 @@
-import { IContentPath } from './common';
-import { Language } from './lang-utils';
+import { IContentPath, Language } from '../parser';
 
 export class TagQuery {
   constructor(readonly contentPath: IContentPath) {}

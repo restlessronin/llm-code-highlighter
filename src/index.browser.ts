@@ -1,6 +1,6 @@
 import { generateFileOutlineHighlights, generateSourceSetHighlights } from './index.shared';
-import { Source } from './tagger';
-import { BrowserContentPath } from './tagger/ContentPath.browser';
+import { Source } from './parser';
+import { BrowserContentPath } from './parser/ContentPath.browser';
 
 export async function getSourceSetHighlights(
   topPercentile: number,

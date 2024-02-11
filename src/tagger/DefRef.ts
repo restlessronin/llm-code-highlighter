@@ -1,4 +1,5 @@
-import { Tag, ITagExtractor, Source } from './common';
+import { Source } from '../parser';
+import { Tag, ITagExtractor } from './common';
 
 export class DefRef {
   static async createEach(extractor: ITagExtractor, sources: Source[]) {

@@ -1,5 +1,5 @@
 import { CodeTagExtractor } from '../tagger/CodeTagExtractor';
-import { NodeContentPath } from '../tagger/ContentPath.node';
+import { NodeContentPath } from '../parser/ContentPath.node';
 import { DefRefs } from '../tagger/DefRefs';
 import { TagRanker } from '../ranker/TagRanker';
 import { pythonSources } from './codefixture';

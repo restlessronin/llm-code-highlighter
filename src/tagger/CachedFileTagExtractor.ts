@@ -1,8 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Tag, ITagExtractor, Source } from './common';
+import { Source } from '../parser';
+import { Tag, ITagExtractor } from './common';
 import { CodeTagExtractor } from './CodeTagExtractor';
-import { NodeContentPath } from './ContentPath.node';
+import { NodeContentPath } from '../parser/ContentPath.node';
 
 export class CachedFileTagExtractor implements ITagExtractor {
   static readonly CACHE_FILE_NAME: string = 'tags.cache.json';

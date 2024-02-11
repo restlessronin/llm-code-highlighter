@@ -1,4 +1,5 @@
-import { createTags, SourceSet } from '../tagger';
+import { SourceSet } from '../parser';
+import { createTags } from '../tagger';
 import { TagRanker } from './TagRanker';
 
 export async function createRankedTags(sourceSet: SourceSet) {

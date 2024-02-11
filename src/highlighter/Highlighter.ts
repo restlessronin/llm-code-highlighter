@@ -1,4 +1,5 @@
-import { Tag, createAST, IContentPath, Source, AST } from '../tagger';
+import { IContentPath, Source, AST } from '../parser';
+import { Tag, createAST } from '../tagger';
 import { HighlightConfiguration, LineOfInterest } from './common';
 import { CodeLineScopeTracker } from './CodeLineScopeTracker';
 import { ScopeLineIntegrator } from './ScopeLineIntegrator';

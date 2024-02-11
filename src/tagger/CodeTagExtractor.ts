@@ -1,6 +1,5 @@
-import { ITagExtractor, IContentPath, Source } from './common';
-import { getLanguage } from './lang-utils';
-import { AST } from './AST';
+import { IContentPath, Source, getLanguage, AST } from '../parser';
+import { ITagExtractor } from './common';
 import { Tagger } from './Tagger';
 import { TagQuery } from './TagQuery';
 

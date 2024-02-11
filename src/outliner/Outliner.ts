@@ -1,4 +1,5 @@
-import { Tag, createAST, IContentPath, Source, AST } from '../tagger';
+import { Source } from '../parser';
+import { Tag } from '../tagger';
 import { HighlightConfiguration, LineOfInterest } from '../highlighter/common';
 import { SourceCodeHighlighter } from '../highlighter/SourceCodeHighlighter';
 

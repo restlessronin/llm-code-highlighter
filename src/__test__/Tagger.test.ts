@@ -1,5 +1,5 @@
-import { AST } from '../tagger/AST';
-import { NodeContentPath } from '../tagger/ContentPath.node';
+import { AST } from '../parser/AST';
+import { NodeContentPath } from '../parser/ContentPath.node';
 import { Tagger } from '../tagger/Tagger';
 
 describe('Tagger', () => {

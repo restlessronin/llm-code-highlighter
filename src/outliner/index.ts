@@ -1,5 +1,6 @@
 import { Outliner } from './Outliner';
-import { Tag, SourceSet, DefRef, IContentPath, Source } from '../tagger';
+import { Source, SourceSet } from '../parser';
+import { Tag, DefRef } from '../tagger';
 import { CodeTagExtractor } from '../tagger/CodeTagExtractor';
 import { LineOfInterest } from '../highlighter/common';
 

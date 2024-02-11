@@ -1,4 +1,4 @@
-import { AST } from './AST';
+import { AST } from '../parser';
 import { Tag } from './common';
 
 export class Tagger {

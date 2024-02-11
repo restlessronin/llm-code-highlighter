@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Tag, ITagExtractor, Source } from './common';
+import { Source } from '../parser';
+import { Tag, ITagExtractor } from './common';
 import { Tags } from './Tags';
 import { DefRef } from './DefRef';
 

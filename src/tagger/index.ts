@@ -1,13 +1,10 @@
 export { Tag } from './common';
 
-import { AST } from './AST';
-import { getLanguage } from './lang-utils';
-import { IContentPath, Source } from './common';
+import { SourceSet, Source, AST, IContentPath } from '../parser';
+import { getLanguage } from '../parser/lang-utils';
 import { CodeTagExtractor } from './CodeTagExtractor';
 import { DefRef } from './DefRef';
 import { DefRefs } from './DefRefs';
-
-type SourceSet = { contentPath: IContentPath; sources: Source[] };
 
 export async function createAST(source: Source, contentPath: IContentPath) {
   const language = getLanguage(source.relPath)!;
@@ -27,4 +24,4 @@ export async function createTags(sourceSet: SourceSet) {
   return defRefs.createTags();
 }
 
-export { Source, IContentPath, SourceSet, DefRef, AST };
+export { DefRef };

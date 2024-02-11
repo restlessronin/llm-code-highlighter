@@ -1,5 +1,5 @@
 import { CodeTagExtractor } from '../tagger/CodeTagExtractor';
-import { NodeContentPath } from '../tagger/ContentPath.node';
+import { NodeContentPath } from '../parser/ContentPath.node';
 import { DefRef } from '../tagger/DefRef';
 import { generateFileOutlineFromTags } from '../outliner';
 import {

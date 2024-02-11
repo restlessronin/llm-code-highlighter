@@ -1,4 +1,5 @@
-import { IContentPath, Source, Tag } from '../tagger';
+import { IContentPath, Source } from '../parser';
+import { Tag } from '../tagger';
 import { Highlighter } from './Highlighter';
 import { LineOfInterest } from './common';
 

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { IContentPath, Source, SourceSet } from './tagger';
+import { IContentPath, Source, SourceSet } from './parser';
 import { createRankedTags } from './ranker';
 import { generateFileHighlightsFromTags } from './highlighter';
 import { createOutlines, generateFileOutlineFromTags } from './outliner';

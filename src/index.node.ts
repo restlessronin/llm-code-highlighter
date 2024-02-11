@@ -1,6 +1,6 @@
 import { generateFileOutlineHighlights, generateSourceSetHighlights } from './index.shared';
-import { Source } from './tagger';
-import { NodeContentPath } from './tagger/ContentPath.node';
+import { Source } from './parser';
+import { NodeContentPath } from './parser/ContentPath.node';
 
 /**
  * Generates highlights for a source set by selecting the top percentile of ranked tags from non-chat sources.

@@ -1,5 +1,5 @@
 import { generateFileHighlights } from '../highlighter';
-import { NodeContentPath } from '../tagger/ContentPath.node';
+import { NodeContentPath } from '../parser/ContentPath.node';
 
 describe('CodeHighlighter', () => {
   it('should format python code correctly', async () => {

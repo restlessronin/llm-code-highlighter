@@ -1,4 +1,4 @@
-export type Source = { relPath: string; code: string };
+import { Source } from '../parser';
 
 export type Tag = {
   relPath: string;
@@ -17,9 +17,4 @@ export type Tag = {
 export interface ITagExtractor {
   workspacePath: string;
   extractTags(source: Source): Promise<Tag[]>;
-}
-
-export interface IContentPath {
-  getQuery(language: string): string;
-  getWasmURL(language: string): string;
 }
