@@ -34,7 +34,6 @@ const extToLang: Record<string, Language> = {
   ql: 'QL',
   rb: 'Ruby',
   rs: 'Rust',
-  tsx: 'TypeScript',
   ts: 'TypeScript',
 };
 
