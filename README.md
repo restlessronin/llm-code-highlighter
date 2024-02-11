@@ -90,11 +90,17 @@ This function generates an outline for a set of files by only displaying the def
 const sources = [
       {
         relPath: 'file1.js',
-        code: 'function add(a, b) { return a + b; }',
+        code: `
+function add(a, b) {
+  return a + b;
+}`,
       },
       {
         relPath: 'file2.js',
-        code: 'function subtract(a, b) { return a - b; }',
+        code: `
+function subtract(a, b) {
+  return a - b;
+}`,
       },
     ];
 
@@ -103,10 +109,12 @@ const sources = [
     console.log(outlines);
     // Output:
     // file1.js
-    // █function add(a, b) { return a + b; }
+    // █function add(a, b) {
+    // ⋮...
     //
     // file2.js
-    // █function subtract(a, b) { return a - b; }
+    //  █function subtract(a, b) {
+    // ⋮...
 ```
 
 Please refer to the source code for more details and options.
