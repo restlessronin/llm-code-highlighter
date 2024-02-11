@@ -88,33 +88,33 @@ This function generates an outline for a set of files by only displaying the def
 
 ````typescript
 const sources = [
-      {
-        relPath: 'file1.js',
-        code: `
+  {
+    relPath: 'file1.js',
+    code: `
 function add(a, b) {
   return a + b;
 }`,
-      },
-      {
-        relPath: 'file2.js',
-        code: `
+  },
+  {
+    relPath: 'file2.js',
+    code: `
 function subtract(a, b) {
   return a - b;
 }`,
-      },
-    ];
+  },
+];
 
-    const outlines = await getFileOutlineHighlights(sources);
+const outlines = await getFileOutlineHighlights(sources);
 
-    console.log(outlines);
-    // Output:
-    // file1.js
-    // █function add(a, b) {
-    // ⋮...
-    //
-    // file2.js
-    //  █function subtract(a, b) {
-    // ⋮...
+console.log(outlines);
+// Output:
+// file1.js
+// █function add(a, b) {
+// ⋮...
+//
+// file2.js
+//  █function subtract(a, b) {
+// ⋮...
 ```
 
 Please refer to the source code for more details and options.
