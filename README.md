@@ -19,15 +19,19 @@ npm install llm-code-highlighter
 To use llm-code-highlighter in your TypeScript project, you need to import the required functions:
 
 ```typescript
-import { generateFileOutlineHighlights, generateSourceSetHighlights } from 'llm-code-highlighter';
+import {
+  generateFileOutlineHighlights,
+  getHighlightsThatFit,
+  NumCharsSizer,
+} from 'llm-code-highlighter';
 ```
 
-`generateSourceSetHighlights`
+`getHighlightsThatFit`
 
 This function generates highlights for a source set by selecting the top percentile of ranked tags from non-chat sources. It uses PageRank to rank all tags across the source set, filters out tags from chat sources, takes the top percentile of tags, groups them by file, and generates highlights for each file. The highlights are then concatenated and returned as a single string.
 
 ```typescript
-const topPercentile = 0.2;
+const contextSizer = new NumCharsSizer(100);
 const chatSources = [
   {
     relPath: 'chat1.js',
@@ -72,7 +76,7 @@ console.log(multiply(2, 3));
   },
 ];
 
-const result = await getSourceSetHighlights(topPercentile, chatSources, otherSources);
+const result = await getHighlightsThatFit(contextSizer, chatSources, otherSources);
 console.log(result);
 // Output:
 // file1.js
