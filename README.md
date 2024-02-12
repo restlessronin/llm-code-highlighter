@@ -28,7 +28,7 @@ import {
 
 `getHighlightsThatFit`
 
-This function generates highlights for a source set by selecting the top percentile of ranked tags from non-chat sources. It uses PageRank to rank all tags across the source set, filters out tags from chat sources, takes the top percentile of tags, groups them by file, and generates highlights for each file. The highlights are then concatenated and returned as a single string.
+The getHighlightsThatFit function selects top-ranked tags to generate highlights for a set of source files. It ranks tags and then groups them by file to create. The function takes chat sources, and other sources, and returns the maximum number of top-ranked tags that will fit into the token budget specified in the Context Sizer.
 
 ```typescript
 const contextSizer = new NumCharsSizer(100);
