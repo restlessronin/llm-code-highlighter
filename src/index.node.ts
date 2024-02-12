@@ -1,31 +1,28 @@
-import { generateFileOutlineHighlights, generateSourceSetHighlights } from './index.shared';
+import { ILLMContextSizer, generateFileOutlineHighlights, highlightsThatFit } from './index.shared';
 import { Source } from './parser';
 import { NodeContentPath } from './parser/ContentPath.node';
 
 /**
- * Generates highlights for a source set by selecting the top percentile of ranked tags from non-chat sources.
+ * Generates highlights for a source set by selecting the top ranked tags from non-chat sources,
+ * that will fit in the context.
  *
  * It ranks all tags across the source set using PageRank, filters out tags from chat sources,
- * takes the top percentile of tags, groups them by file, and generates highlights for each file.
+ * groups them by file, and generates highlights for each file.
  *
- * The highlights are concatenated and returned.
+ * If the concatenated highlights do not fit in context a binary search on percentile is carried out
+ * until a result is found that fits.
  *
- * @param topPercentile - The percentile of top ranked tags to use for highlights.
+ * @param contextSizer: - The context sizer that determines if the highlights will fit in the context.
  * @param chatSources - The source code files that are from chat.
  * @param otherSources - The source code files that are not from chat.
  * @returns The concatenated highlights for the top percentile of non-chat tags.
  */
-export async function getSourceSetHighlights(
-  topPercentile: number,
+export async function getHighlightsThatFit(
+  contextSizer: ILLMContextSizer,
   chatSources: { relPath: string; code: string }[],
   otherSources: { relPath: string; code: string }[]
 ) {
-  return generateSourceSetHighlights(
-    topPercentile,
-    chatSources,
-    otherSources,
-    new NodeContentPath()
-  );
+  return highlightsThatFit(contextSizer, chatSources, otherSources, new NodeContentPath());
 }
 
 /**

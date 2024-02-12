@@ -4,7 +4,44 @@ import { createRankedTags } from './ranker';
 import { generateFileHighlightsFromTags } from './highlighter';
 import { createOutlines, generateFileOutlineFromTags } from './outliner';
 
-export async function generateSourceSetHighlights(
+export interface ILLMContextSizer {
+  fits(content: string): boolean;
+}
+
+export class NumCharsSizer implements ILLMContextSizer {
+  constructor(readonly sizeInChars: number) {}
+  fits(content: string): boolean {
+    return content.length <= this.sizeInChars;
+  }
+}
+
+export async function highlightsThatFit(
+  contextSizer: ILLMContextSizer,
+  charSourceSet: Source[],
+  otherSources: Source[],
+  contentPath: IContentPath
+) {
+  let percentile = 1;
+  let prevPercentile = percentile;
+  let prevHighlights;
+  while (true) {
+    const highlights = await generateSourceSetHighlights(
+      percentile,
+      charSourceSet,
+      otherSources,
+      contentPath
+    );
+    if (!highlights) return prevHighlights;
+    const nextPercentile =
+      (contextSizer.fits(highlights) ? prevPercentile + percentile : percentile) / 2;
+    prevHighlights = contextSizer.fits(highlights) ? highlights : prevHighlights;
+    prevPercentile = percentile;
+    percentile = nextPercentile;
+    if (Math.abs(nextPercentile - prevPercentile) < 0.01) return highlights;
+  }
+}
+
+async function generateSourceSetHighlights(
   topPercentile: number,
   chatSources: Source[],
   otherSources: Source[],

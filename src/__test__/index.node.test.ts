@@ -1,8 +1,9 @@
-import { getSourceSetHighlights, getFileOutlineHighlights } from '../index.node';
+import { getHighlightsThatFit, getFileOutlineHighlights } from '../index.node';
+import { NumCharsSizer } from '../index.shared';
 
-describe('getSourceSetHighlights', () => {
+describe('getHighlightsThatFit', () => {
   it('should return the concatenated highlights for the top percentile of non-chat tags', async () => {
-    const topPercentile = 0.2;
+    const contextSizer = new NumCharsSizer(100);
     const chatSources = [
       {
         relPath: 'chat1.js',
@@ -48,7 +49,7 @@ console.log(multiply(2, 3));
       },
     ];
 
-    const result = await getSourceSetHighlights(topPercentile, chatSources, otherSources);
+    const result = await getHighlightsThatFit(contextSizer, chatSources, otherSources);
 
     expect(result).toBe(`
 file1.js
