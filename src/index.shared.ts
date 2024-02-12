@@ -21,9 +21,9 @@ export async function highlightsThatFit(
   otherSources: Source[],
   contentPath: IContentPath
 ) {
+  let loPercentile = 0;
+  let hiPercentile = 1;
   let percentile = 1;
-  let prevPercentile = percentile;
-  let prevHighlights;
   while (true) {
     const highlights = await generateSourceSetHighlights(
       percentile,
@@ -31,13 +31,16 @@ export async function highlightsThatFit(
       otherSources,
       contentPath
     );
-    if (!highlights) return prevHighlights;
-    const nextPercentile =
-      (contextSizer.fits(highlights) ? prevPercentile + percentile : percentile) / 2;
-    prevHighlights = contextSizer.fits(highlights) ? highlights : prevHighlights;
-    prevPercentile = percentile;
+    if (!highlights) {
+      loPercentile = percentile;
+    } else {
+      const fits = contextSizer.fits(highlights);
+      loPercentile = fits ? percentile : loPercentile;
+      hiPercentile = fits ? hiPercentile : percentile;
+    }
+    const nextPercentile = (loPercentile + hiPercentile) / 2;
+    if (Math.abs(nextPercentile - percentile) < 0.001) return highlights;
     percentile = nextPercentile;
-    if (Math.abs(nextPercentile - prevPercentile) < 0.01) return highlights;
   }
 }
 
