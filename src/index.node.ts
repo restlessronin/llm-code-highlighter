@@ -36,3 +36,5 @@ export async function getHighlightsThatFit(
 export async function getFileOutlineHighlights(sources: Source[]) {
   return generateFileOutlineHighlights({ sources: sources, contentPath: new NodeContentPath() });
 }
+
+export { ILLMContextSizer };

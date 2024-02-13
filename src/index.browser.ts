@@ -16,3 +16,5 @@ export async function getFileOutlineHighlights(sources: Source[]) {
     contentPath: new BrowserContentPath(),
   });
 }
+
+export { ILLMContextSizer };
