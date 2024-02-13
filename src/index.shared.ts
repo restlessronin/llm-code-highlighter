@@ -17,7 +17,7 @@ export class NumCharsSizer implements ILLMContextSizer {
 
 export async function highlightsThatFit(
   contextSizer: ILLMContextSizer,
-  charSourceSet: Source[],
+  charSources: Source[],
   otherSources: Source[],
   contentPath: IContentPath
 ) {
@@ -25,26 +25,16 @@ export async function highlightsThatFit(
   let hiPercentile = 1;
   let percentile = 1;
   while (true) {
-    const highlights = await generateSourceSetHighlights(
-      percentile,
-      charSourceSet,
-      otherSources,
-      contentPath
-    );
-    if (!highlights) {
-      loPercentile = percentile;
-    } else {
-      const fits = contextSizer.fits(highlights);
-      loPercentile = fits ? percentile : loPercentile;
-      hiPercentile = fits ? hiPercentile : percentile;
-    }
-    const nextPercentile = (loPercentile + hiPercentile) / 2;
-    if (Math.abs(nextPercentile - percentile) < 0.001) return highlights;
-    percentile = nextPercentile;
+    const highlights = await generateHighlights(percentile, charSources, otherSources, contentPath);
+    if (Math.abs(hiPercentile - loPercentile) < 0.001) return highlights;
+    const fits = !highlights || contextSizer.fits(highlights);
+    loPercentile = fits ? percentile : loPercentile;
+    hiPercentile = fits ? hiPercentile : percentile;
+    percentile = (loPercentile + hiPercentile) / 2;
   }
 }
 
-async function generateSourceSetHighlights(
+async function generateHighlights(
   topPercentile: number,
   chatSources: Source[],
   otherSources: Source[],
