@@ -24,9 +24,10 @@ export async function highlightsThatFit(
   let loPercentile = 0;
   let hiPercentile = 1;
   let percentile = 1;
+  let highlights;
   while (true) {
-    const highlights = await generateHighlights(percentile, charSources, otherSources, contentPath);
     if (Math.abs(hiPercentile - loPercentile) < 0.001) return highlights;
+    highlights = await generateHighlights(percentile, charSources, otherSources, contentPath);
     const fits = !highlights || contextSizer.fits(highlights);
     loPercentile = fits ? percentile : loPercentile;
     hiPercentile = fits ? hiPercentile : percentile;
