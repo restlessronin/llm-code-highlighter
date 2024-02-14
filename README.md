@@ -22,16 +22,21 @@ To use llm-code-highlighter in your TypeScript project, you need to import the r
 import {
   generateFileOutlineHighlights,
   getHighlightsThatFit,
-  NumCharsSizer,
+  ILLMContextSizer,
 } from 'llm-code-highlighter';
 ```
 
 `getHighlightsThatFit`
 
-The getHighlightsThatFit function selects top-ranked tags to generate highlights for a set of source files. It ranks tags and then groups them by file to create. The function takes chat sources, and other sources, and returns the maximum number of top-ranked tags that will fit into the token budget specified in the Context Sizer.
+The getHighlightsThatFit function selects top-ranked tags to generate highlights for a set of source files. The function takes chat sources, and other sources, and returns the maximum number of top-ranked tags (only from other sources) that will fit into the token budget specified in the Context Sizer.
 
 ```typescript
-const contextSizer = new NumCharsSizer(100);
+const contextSizer = {
+  fits(content: string): boolean {
+    return content.length <= 100;
+  },
+} as ILLMContextSizer;
+
 const chatSources = [
   {
     relPath: 'chat1.js',
@@ -88,7 +93,7 @@ console.log(result);
 
 `generateFileOutlineHighlights`
 
-This function generates an outline for a set of files by only displaying the definition lines. It takes an array of objects, each containing the path and source code for a file. The function generates outlines for all the files, concatenates them, and returns the concatenated outlines as a single string.
+This function generates an outline for a set of files by only displaying the definition lines. It takes an array of objects, each containing the path and source code for a file. The function generates outlines for each of the files, concatenates all of them, and returns the result as a single string.
 
 ````typescript
 const sources = [
