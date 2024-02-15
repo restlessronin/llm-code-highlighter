@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import MultiGraph from 'graphology';
 import pagerank from 'graphology-metrics/centrality/pagerank';
-import { Tags } from '../tagger/Tags';
+import { AllTags } from '../tagger/AllTags';
 import { RankedTags } from './RankedTags';
 
 export class TagRanker {
-  constructor(readonly tags: Tags) {}
+  constructor(readonly tags: AllTags) {}
 
   pagerank() {
     class _Counter extends Map<string, number> {

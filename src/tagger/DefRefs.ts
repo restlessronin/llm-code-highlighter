@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Source } from '../parser';
 import { Tag, ITagExtractor } from './common';
-import { Tags } from './Tags';
+import { AllTags } from './AllTags';
 import { DefRef } from './DefRef';
 
 export class DefRefs {
@@ -53,6 +53,6 @@ export class DefRefs {
     });
     if (defines.size === 0 || definitions.size === 0 || references.size === 0) return;
     const identifiers = Array.from(defines.keys()).filter(key => references.has(key));
-    return new Tags(this.workspacePath, relPaths, defines, definitions, references, identifiers);
+    return new AllTags(this.workspacePath, relPaths, defines, definitions, references, identifiers);
   }
 }

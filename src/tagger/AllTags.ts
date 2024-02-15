@@ -1,6 +1,6 @@
 import { Tag } from './common';
 
-export class Tags {
+export class AllTags {
   constructor(
     readonly workspacePath: string,
     readonly relPaths: string[],
