@@ -1,4 +1,4 @@
-import { ILLMContextSizer, generateFileOutlineHighlights, highlightsThatFit } from './index.shared';
+import { ILLMContextSizer, generateFileOutlines, highlightsThatFit } from './index.shared';
 import { Source } from './parser';
 import { NodeContentPath } from './parser/ContentPath.node';
 
@@ -34,7 +34,7 @@ export async function getHighlightsThatFit(
  * @returns The concatenated outlines for all the files.
  */
 export async function getFileOutlineHighlights(sources: Source[]) {
-  return generateFileOutlineHighlights({ sources: sources, contentPath: new NodeContentPath() });
+  return generateFileOutlines({ sources: sources, contentPath: new NodeContentPath() });
 }
 
 export { ILLMContextSizer };

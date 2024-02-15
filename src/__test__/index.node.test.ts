@@ -1,5 +1,11 @@
-import { getHighlightsThatFit, getFileOutlineHighlights } from '../index.node';
-import { NumCharsSizer } from '../index.shared';
+import { getHighlightsThatFit, getFileOutlineHighlights, ILLMContextSizer } from '../index.node';
+
+class NumCharsSizer implements ILLMContextSizer {
+  constructor(readonly sizeInChars: number) {}
+  fits(content: string): boolean {
+    return content.length <= this.sizeInChars;
+  }
+}
 
 describe('getHighlightsThatFit', () => {
   it('should return the concatenated highlights for the top percentile of non-chat tags', async () => {

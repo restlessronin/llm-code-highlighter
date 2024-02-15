@@ -1,4 +1,4 @@
-import { ILLMContextSizer, generateFileOutlineHighlights, highlightsThatFit } from './index.shared';
+import { ILLMContextSizer, generateFileOutlines, highlightsThatFit } from './index.shared';
 import { Source } from './parser';
 import { ContinueContentPath } from './parser/ContentPath.continue';
 
@@ -11,7 +11,7 @@ export async function getHighlightsThatFit(
 }
 
 export async function getFileOutlineHighlights(sources: Source[]) {
-  return generateFileOutlineHighlights({
+  return generateFileOutlines({
     sources: sources,
     contentPath: new ContinueContentPath(),
   });

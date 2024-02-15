@@ -1,13 +1,20 @@
 import { CodeTagExtractor } from '../tagger/CodeTagExtractor';
 import { NodeContentPath } from '../parser/ContentPath.node';
 import { DefRef } from '../tagger/DefRef';
-import { generateFileOutlineFromTags } from '../outliner';
 import {
   test_typescript_code,
   expected_outlines_typescript,
   test_python_code,
   expected_outlines_python,
 } from './codefixture';
+import { Outliner } from '../outliner/Outliner';
+import { Tag } from '../tagger';
+
+async function generateFileOutlineFromTags(fileTags: Tag[], code: string) {
+  const highlighter = await Outliner.create(fileTags, code);
+  if (!highlighter) return;
+  return highlighter.toHighlights();
+}
 
 describe('outliner', () => {
   let extractor: CodeTagExtractor;
