@@ -95,7 +95,7 @@ console.log(result);
 
 This function generates an outline for a set of files by only displaying the definition lines. It takes an array of objects, each containing the path and source code for a file. The function generates outlines for each of the files, concatenates all of them, and returns the result as a single string.
 
-````typescript
+```typescript
 const sources = [
   {
     relPath: 'file1.js',
@@ -127,4 +127,3 @@ console.log(outlines);
 ```
 
 Please refer to the source code for more details and options.
-````
