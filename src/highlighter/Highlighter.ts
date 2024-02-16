@@ -33,8 +33,8 @@ export class Highlighter {
     const scopeTracker = CodeLineScopeTracker.create(codeLines.length).withScopeDataInitialized(
       this.ast.tree.rootNode
     );
-    const header = scopeTracker.toDominantScopeBlockRepresentation();
-    const scopeIntegrator = new ScopeLineIntegrator(codeLines, header);
+    const scopes = scopeTracker.toDominantScopes();
+    const scopeIntegrator = new ScopeLineIntegrator(codeLines, scopes);
     const highlighter = scopeIntegrator.toCodeHighlighter(this.linesOfInterest);
     if (!highlighter) return;
     const highlights = highlighter.withSmallGapsClosed().toFormattedString();

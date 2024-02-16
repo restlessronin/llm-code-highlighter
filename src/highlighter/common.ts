@@ -1,2 +1,2 @@
 export type LineOfInterest = number;
-export type Scope = Set<number>;
+export type Scopes = [number, number, number][];

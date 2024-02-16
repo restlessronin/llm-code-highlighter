@@ -1,5 +1,7 @@
 import { Parser } from '../parser/TreeSitter';
-import { Scope } from './common';
+import { Scopes } from './common';
+
+export type ScopeStarts = Set<number>;
 
 export class CodeLineScopeTracker {
   static create(numLines: number) {
@@ -14,8 +16,8 @@ export class CodeLineScopeTracker {
   constructor(
     readonly numLines: number,
     readonly nodes: Parser.SyntaxNode[][],
-    readonly scopes: Scope[],
-    readonly headers: [number, number, number][][]
+    readonly scopeStarts: ScopeStarts[],
+    readonly scopes: Scopes[]
   ) {}
 
   withScopeDataInitialized(node: Parser.SyntaxNode, depth: number = 0) {
@@ -24,21 +26,21 @@ export class CodeLineScopeTracker {
     const size = endLine - startLine;
     this.nodes[startLine].push(node);
     if (size) {
-      this.headers[startLine].push([size, startLine, endLine]);
+      this.scopes[startLine].push([size, startLine, endLine]);
     }
     for (let i = startLine; i <= endLine; i++) {
-      this.scopes[i].add(startLine);
+      this.scopeStarts[i].add(startLine);
     }
     node.children.forEach(child => this.withScopeDataInitialized(child, depth + 1));
     return this;
   }
 
-  toDominantScopeBlockRepresentation() {
-    const header = new Array<[number, number, number]>(this.numLines).fill([0, 0, 0]);
+  toDominantScopes() {
+    const scopes: Scopes = new Array<[number, number, number]>(this.numLines).fill([0, 0, 0]);
     for (let i = 0; i < this.numLines; i++) {
-      const headers = this.headers[i].sort((a, b) => a[0] - b[0]);
-      header[i] = headers.length > 1 ? headers[0] : [1, i, i + 1];
+      const scopesI = this.scopes[i].sort((a, b) => a[0] - b[0]);
+      scopes[i] = scopesI.length > 1 ? scopesI[0] : [1, i, i + 1];
     }
-    return header;
+    return scopes;
   }
 }

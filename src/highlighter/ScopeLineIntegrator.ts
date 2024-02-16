@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import { SourceCodeHighlighter } from './SourceCodeHighlighter';
+import { Scopes } from './common';
 
 export class ScopeLineIntegrator {
-  constructor(readonly codeLines: string[], readonly header: [number, number, number][]) {}
+  constructor(readonly codeLines: string[], readonly scopes: Scopes) {}
 
   toCodeHighlighter(lineNumbers: number[]) {
     const linesOfInterest = new Set<number>(lineNumbers);
@@ -23,7 +24,7 @@ export class ScopeLineIntegrator {
   private includeLinesFromParentScopes(linesOfInterest: Set<number>) {
     return new Set(
       Array.from(linesOfInterest).reduce((acc, scopeStart) => {
-        const header = this.header[scopeStart];
+        const header = this.scopes[scopeStart];
         if (header.length > 0) {
           const [_size, start, end] = header;
           return _.range(start, end).reduce((accI, i) => {
