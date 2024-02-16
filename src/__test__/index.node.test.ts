@@ -1,4 +1,4 @@
-import { getHighlightsThatFit, getFileOutlineHighlights, ILLMContextSizer } from '../index.node';
+import { getHighlightsThatFit, getOutlines, ILLMContextSizer } from '../index.node';
 
 class NumCharsSizer implements ILLMContextSizer {
   constructor(readonly sizeInChars: number) {}
@@ -84,7 +84,7 @@ describe('getFileOutlineHighlights', () => {
       },
     ];
 
-    const result = await getFileOutlineHighlights(sources);
+    const result = await getOutlines(sources);
 
     expect(result).toBe(`
 file1.js

@@ -33,7 +33,7 @@ export async function getHighlightsThatFit(
  * @param sources - An array of objects, each having the path and source code for a file
  * @returns The concatenated outlines for all the files.
  */
-export async function getFileOutlineHighlights(sources: Source[]) {
+export async function getOutlines(sources: Source[]) {
   return generateFileOutlines({ sources: sources, contentPath: new NodeContentPath() });
 }
 

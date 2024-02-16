@@ -10,7 +10,7 @@ export async function getHighlightsThatFit(
   return highlightsThatFit(contextSizer, chatSources, otherSources, new ContinueContentPath());
 }
 
-export async function getFileOutlineHighlights(sources: Source[]) {
+export async function getOutlines(sources: Source[]) {
   return generateFileOutlines({
     sources: sources,
     contentPath: new ContinueContentPath(),
