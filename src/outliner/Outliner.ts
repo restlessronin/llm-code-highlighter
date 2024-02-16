@@ -1,9 +1,7 @@
 import { Source } from '../parser';
 import { Tag } from '../tagger';
-import { HighlightConfiguration, LineOfInterest } from '../highlighter/common';
+import { LineOfInterest } from '../highlighter/common';
 import { SourceCodeHighlighter } from '../highlighter/SourceCodeHighlighter';
-
-const mapOptions = new HighlightConfiguration(10);
 
 export class Outliner {
   static async create(fileTags: Tag[], code: string) {

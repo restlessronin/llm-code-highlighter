@@ -1,5 +1,5 @@
 import { Parser } from '../parser/TreeSitter';
-import { Scope, HighlightConfiguration } from './common';
+import { Scope } from './common';
 
 export class CodeLineScopeTracker {
   static create(numLines: number) {
@@ -33,19 +33,11 @@ export class CodeLineScopeTracker {
     return this;
   }
 
-  toDominantScopeBlockRepresentation(mapOptions: HighlightConfiguration) {
-    const headerMax = mapOptions.headerMax;
+  toDominantScopeBlockRepresentation() {
     const header = new Array<[number, number, number]>(this.numLines).fill([0, 0, 0]);
     for (let i = 0; i < this.numLines; i++) {
       const headers = this.headers[i].sort((a, b) => a[0] - b[0]);
-      let [size, headStart, headEnd] = [1, i, i + 1];
-      if (headers.length > 1) {
-        [size, headStart, headEnd] = headers[0];
-        if (size > headerMax) {
-          headEnd = headStart + headerMax;
-        }
-      }
-      header[i] = [size, headStart, headEnd];
+      header[i] = headers.length > 1 ? headers[0] : [1, i, i + 1];
     }
     return header;
   }
