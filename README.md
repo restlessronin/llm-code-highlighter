@@ -24,7 +24,7 @@ import { getHighlightsThatFit, getOutlines, ILLMContextSizer } from 'llm-code-hi
 
 `getHighlightsThatFit`
 
-The getHighlightsThatFit function selects top-ranked tags to generate highlights for a set of source files. The function takes chat sources, and other sources, and returns the maximum number of top-ranked tags (only from other sources) that will fit into the token budget specified in the Context Sizer.
+This function identifies highlights within the code by selecting high-ranked tags from "chat" and "other" source files. It then determines and returns the maximum number of highlighted lines, exclusively from "other" sources, that can be included within the token budget defined by the ContextSizer.
 
 ```typescript
 const contextSizer = {
