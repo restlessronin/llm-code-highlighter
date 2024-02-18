@@ -1,7 +1,7 @@
 {
   "name": "llm-code-highlighter",
   "version": "0.0.11",
-  "description": "Condense source code for LLM analysis by extracting essential highlights, utilizing Paul Gauthier's repomap technique from Aider Chat.",
+  "description": "Condense source code for LLM analysis by extracting essential highlights, utilizing a simplified version of Paul Gauthier's repomap technique from Aider Chat.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/restlessronin/llm-code-highlighter.git"

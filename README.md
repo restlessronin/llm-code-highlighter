@@ -1,8 +1,8 @@
 # llm-code-highlighter
 
-**llm-code-highlighter** is a TypeScript library for creating succinct repository highlights, based on Paul Gauthier's repomap technique as outlined in the [Aider Chat docs](https://aider.chat/docs/repomap.html) and implemented by the code in the [aider](https://github.com/paul-gauthier/aider) and [grep-ast](https://github.com/paul-gauthier/grep-ast) repos.
+**llm-code-highlighter** is a TypeScript library for creating succinct repository highlights, based on a simplified version of Paul Gauthier's repomap technique as outlined in the [Aider Chat docs](https://aider.chat/docs/repomap.html) and implemented by the code in the [aider](https://github.com/paul-gauthier/aider) and [grep-ast](https://github.com/paul-gauthier/grep-ast) repos.
 
-This typescript version of the original python code was created with assistance from ChatGPT 4. Every line of code was manually curated by me (@restlessronin) 😇.
+This typescript version of the original python code was created with assistance from ChatGPT 4. Every line of code was manually curated (by me, @restlessronin 😇).
 
 ## Installation
 
@@ -91,7 +91,7 @@ console.log(result);
 // ⋮...
 ```
 
-`generateFileOutlineHighlights`
+`getOutlines`
 
 This function generates an outline for a set of files by only displaying the definition lines. It takes an array of objects, each containing the path and source code for a file. The function generates outlines for each of the files, concatenates all of them, and returns the result as a single string.
 
@@ -113,7 +113,7 @@ function subtract(a, b) {
   },
 ];
 
-const outlines = await getFileOutlineHighlights(sources);
+const outlines = await getOutlines(sources);
 
 console.log(outlines);
 // Output:
