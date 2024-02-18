@@ -1,7 +1,7 @@
 import { Source } from '../parser';
 import { Tag } from '../tagger';
 import { LineOfInterest } from '../highlighter/common';
-import { SourceCodeHighlighter } from '../highlighter/SourceCodeHighlighter';
+import { CodeHighlighter } from '../highlighter/CodeHighlighter';
 
 export class Outliner {
   static async create(fileTags: Tag[], code: string) {
@@ -19,10 +19,10 @@ export class Outliner {
 
   toHighlights() {
     const codeLines = this.source.code.split('\n');
-    const highlighter = new SourceCodeHighlighter(
+    const highlighter = new CodeHighlighter(
       codeLines,
-      Array.from(this.linesOfInterest).sort(),
-      Array.from(new Set(this.linesOfInterest)).sort()
+      Array.from(this.linesOfInterest).sort((a, b) => a - b),
+      Array.from(new Set(this.linesOfInterest)).sort((a, b) => a - b)
     );
     if (!highlighter) return;
     const highlights = highlighter.toFormattedString();

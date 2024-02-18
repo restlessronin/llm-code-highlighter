@@ -1,4 +1,4 @@
-import { ILLMContextSizer, generateFileOutlines, highlightsThatFit } from './index.shared';
+import { ILLMContextSizer, outlines, highlightsThatFit } from './index.shared';
 import { Source } from './parser';
 import { BrowserContentPath } from './parser/ContentPath.browser';
 
@@ -11,10 +11,7 @@ export async function getHighlightsThatFit(
 }
 
 export async function getOutlines(sources: Source[]) {
-  return generateFileOutlines({
-    sources: sources,
-    contentPath: new BrowserContentPath(),
-  });
+  return outlines({ sources: sources, contentPath: new BrowserContentPath() });
 }
 
 export { ILLMContextSizer };

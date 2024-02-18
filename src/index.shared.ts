@@ -29,7 +29,7 @@ export async function highlightsThatFit(
   return highlightedCode;
 }
 
-export async function generateFileOutlines(sourceSet: SourceSet) {
+export async function outlines(sourceSet: SourceSet) {
   const outlines = await Outlines.create(sourceSet);
   if (!outlines) return;
   return outlines.toCodeOutlines();

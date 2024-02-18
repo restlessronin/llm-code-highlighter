@@ -1,13 +1,13 @@
 import { LineOfInterest } from './common';
 
-export class SourceCodeHighlighter {
+export class CodeHighlighter {
   constructor(
     readonly codeLines: string[],
     readonly linesOfInterest: LineOfInterest[],
     readonly showLines: LineOfInterest[]
   ) {}
 
-  withSmallGapsClosed(): SourceCodeHighlighter {
+  withSmallGapsClosed(): CodeHighlighter {
     const closedShow = new Set<number>();
     const sortedShow = Array.from(this.showLines).sort((a, b) => a - b);
     for (let i = 0; i < sortedShow.length - 1; i++) {
@@ -19,7 +19,7 @@ export class SourceCodeHighlighter {
     if (sortedShow.length > 0) {
       closedShow.add(sortedShow[sortedShow.length - 1]);
     }
-    return new SourceCodeHighlighter(this.codeLines, this.linesOfInterest, Array.from(closedShow));
+    return new CodeHighlighter(this.codeLines, this.linesOfInterest, Array.from(closedShow));
   }
 
   toFormattedString(): string {

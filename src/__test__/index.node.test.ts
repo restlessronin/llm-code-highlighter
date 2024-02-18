@@ -20,7 +20,7 @@ describe('getHighlightsThatFit', () => {
       {
         relPath: 'chat2.js',
         code: `
-          console.log(subtract(3, 1));
+          console.log(multiply(3, 1));
         `,
       },
     ];
@@ -61,7 +61,11 @@ console.log(multiply(2, 3));
 file1.js
 ⋮...
 █function add(a, b) {
-│  return a + b;
+⋮...
+
+file3.js
+⋮...
+█function multiply(a, b) {
 ⋮...
 `);
   });

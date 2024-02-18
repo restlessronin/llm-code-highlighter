@@ -1,8 +1,7 @@
 import { IContentPath, Source, AST } from '../parser';
 import { Tag, createAST } from '../tagger';
 import { LineOfInterest } from './common';
-import { CodeLineScopeTracker } from './CodeLineScopeTracker';
-import { ScopeLineIntegrator } from './ScopeLineIntegrator';
+import { CodelineScoper } from './CodelineScoper';
 
 export class Highlighter {
   static async create(fileTags: Tag[], code: string, contentPath: IContentPath) {
@@ -30,12 +29,11 @@ export class Highlighter {
 
   toHighlights() {
     const codeLines = this.source.code.split('\n');
-    const scopeTracker = CodeLineScopeTracker.create(codeLines.length).withScopeDataInitialized(
+    const scopeTracker = CodelineScoper.create(codeLines.length).withScopeDataInitialized(
       this.ast.tree.rootNode
     );
-    const scopes = scopeTracker.toDominantScopes();
-    const scopeIntegrator = new ScopeLineIntegrator(codeLines, scopes);
-    const highlighter = scopeIntegrator.toCodeHighlighter(this.linesOfInterest);
+    const scopes = scopeTracker.toDominantScopes(codeLines);
+    const highlighter = scopes.toCodeHighlighter(this.linesOfInterest);
     if (!highlighter) return;
     const highlights = highlighter.withSmallGapsClosed().toFormattedString();
     return `\n${this.source.relPath}\n${highlights}`;

@@ -25,13 +25,13 @@ describe('CodeHighlighter', () => {
 def my_function(arg1, arg2):
   return arg1 * arg2`,
       },
-      [0, 4],
+      [1, 4],
       new NodeContentPath()
     );
     const expectedOutput = `
 test.py
-█class MyClass:
-│  def my_method(self, arg1, arg2):
+│class MyClass:
+█  def my_method(self, arg1, arg2):
 ⋮...
 █def my_function(arg1, arg2):
 ⋮...
