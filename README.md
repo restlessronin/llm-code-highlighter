@@ -19,11 +19,7 @@ npm install llm-code-highlighter
 To use llm-code-highlighter in your TypeScript project, you need to import the required functions:
 
 ```typescript
-import {
-  generateFileOutlineHighlights,
-  getHighlightsThatFit,
-  ILLMContextSizer,
-} from 'llm-code-highlighter';
+import { getHighlightsThatFit, getOutlines, ILLMContextSizer } from 'llm-code-highlighter';
 ```
 
 `getHighlightsThatFit`
@@ -47,10 +43,11 @@ const chatSources = [
   {
     relPath: 'chat2.js',
     code: `
-          console.log(subtract(3, 1));
+          console.log(multiply(3, 1));
         `,
   },
 ];
+
 const otherSources = [
   {
     relPath: 'file1.js',
@@ -87,7 +84,11 @@ console.log(result);
 // file1.js
 // ⋮...
 // █function add(a, b) {
-// │  return a + b;
+// ⋮...
+//
+// file3.js
+// ⋮...
+// █function multiply(a, b) {
 // ⋮...
 ```
 
