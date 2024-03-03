@@ -23,7 +23,7 @@ describe('TagRanker', () => {
   describe('pagerank', () => {
     it('should return ranked definitions', () => {
       const rankedTagRanker = tagRanker.pagerank();
-      expect(rankedTagRanker.rankedDefinitions).toEqual(expect.any(Array));
+      expect(rankedTagRanker!.rankedDefinitions).toEqual(expect.any(Array));
     });
   });
 });

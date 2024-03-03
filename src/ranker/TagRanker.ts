@@ -32,7 +32,12 @@ export class TagRanker {
         });
       });
     });
-    pagerank.assign(G);
+    try {
+      pagerank.assign(G);
+    } catch (e) {
+      console.log(e);
+      return;
+    }
     const rankedDefinitionsMap = new Map<string, number>();
     G.nodes().forEach(referencer => {
       const refRank = G.getNodeAttribute(referencer, 'pagerank');
