@@ -31,10 +31,10 @@
     "@swc/register": "^0.1.10",
     "@types/jest": "^29.5.11",
     "@types/lodash": "^4.14.202",
-    "@types/node": "^20.10.5",
+    "@types/node": "^20.11.24",
     "@types/webpack": "^5.28.5",
-    "@typescript-eslint/eslint-plugin": "^6.15.0",
-    "@typescript-eslint/parser": "^6.15.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
     "cpy-cli": "^5.0.0",
     "esbuild-register": "^3.5.0",
     "eslint": "^8.56.0",
@@ -47,7 +47,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
-    "webpack": "^5.89.0",
+    "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
@@ -55,6 +55,6 @@
     "graphology-metrics": "^2.2.0",
     "lodash": "^4.17.21",
     "tree-sitter-wasms": "^0.1.6",
-    "web-tree-sitter": "^0.20.8"
+    "web-tree-sitter": "^0.21.0"
   }
 }
